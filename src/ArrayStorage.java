@@ -5,15 +5,18 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int size = 0;
 
     void clear() {
-        for (int i = size() - 1; i >= 0; i--) {
+        for (int i = 0; i < size(); i++) {
             storage[i] = null;
         }
+        size = 0;
     }
 
     void save(Resume resume) {
         storage[size()] = resume;
+        size++;
     }
 
     Resume get(String uuid) {
@@ -30,9 +33,10 @@ public class ArrayStorage {
     void delete(String uuid) {
         for (int i = 0; i < size(); i++) {
             if (storage[i].uuid.equals(uuid)) {
-                for (int j = i; j < size() ; j++) {     //shift array by one element
+                for (int j = i; j < size(); j++) {     //shift array by one element
                     storage[j] = storage[j + 1];
                 }
+                size--;
                 break; //full search skip because uuids are unique (see req)
             }
         }
@@ -42,20 +46,10 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] resumes = new Resume[size()];
-        resumes = Arrays.copyOfRange(storage, 0, size());
-        return resumes;
+        return Arrays.copyOfRange(storage, 0, size());
     }
 
     int size() {
-        Integer lastElementIndex = null;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                break; //full search skip according to the way how data is stored in storage (see req)
-            } else {
-                lastElementIndex = i;
-            }
-        }
-        return (lastElementIndex != null) ? 1 + lastElementIndex : 0; //size should be zero if no elements were found
+        return size;
     }
 }
