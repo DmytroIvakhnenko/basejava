@@ -8,32 +8,30 @@ public class ArrayStorage {
     private int size = 0;
 
     void clear() {
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
         size = 0;
     }
 
     void save(Resume resume) {
-        storage[size()] = resume;
+        storage[size] = resume;
         size++;
     }
 
     Resume get(String uuid) {
-        Resume resume = null;
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                resume = storage[i];
-                break; //full search skip because uuids are unique (see req)
+                return storage[i];
             }
         }
-        return resume;
+        return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                for (int j = i; j < size(); j++) {     //shift array by one element
+                for (int j = i; j < size - 1; j++) {     //shift array by one element
                     storage[j] = storage[j + 1];
                 }
                 size--;
@@ -46,7 +44,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size());
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     int size() {
