@@ -8,12 +8,12 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private static final int MAX_STORAGE_SIZE = 10000;
+    private static final int MAX_STORAGE_SIZE = 10_000;
     private Resume[] storage = new Resume[MAX_STORAGE_SIZE];
     private int size = 0;
 
     public void clear() {
-        storage = Arrays.copyOfRange(storage, 0, 0);
+        Arrays.fill(storage, null);
         size = 0;
     }
 
@@ -45,19 +45,19 @@ public class ArrayStorage {
         int position = findResume(uuid);
         if (position >= 0) {
             return storage[position];
-        } else {
-            System.out.println("Resume with id:'" + uuid + "' wasn't found in resume storage!");
-            return null;
         }
+        System.out.println("Resume with id:'" + uuid + "' wasn't found in resume storage!");
+        return null;
     }
 
     public void delete(String uuid) {
         int position = findResume(uuid);
         if (position >= 0) {
-            for (int j = position; j < size - 1; j++) {     //shift array by one element
-                storage[j] = storage[j + 1];
+            //shift array by one element
+            if (size - position - 1 >= 0) {
+                System.arraycopy(storage, position + 1, storage, position, size - 1 - position);
+                size--;
             }
-            size--;
         } else {
             System.out.println("Resume with id:'" + uuid + "' wasn't found in resume storage, deletion was unsuccessful!\n");
         }
