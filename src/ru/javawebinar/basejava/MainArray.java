@@ -1,7 +1,7 @@
-package com.basejava.webapp;
+package ru.javawebinar.basejava;
 
-import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.storage.ArrayStorage;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.ArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
