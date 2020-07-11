@@ -18,6 +18,6 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected int rightShift(int position) {
-        return position;
+        return size;
     }
 }
