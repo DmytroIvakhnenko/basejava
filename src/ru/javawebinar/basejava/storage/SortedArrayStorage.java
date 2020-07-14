@@ -16,12 +16,15 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 
-    protected int rightShift(int position) {
-        position = (position + 1) * (-1);       //insertion point transformation got from binarySearch()
+    protected void saveElement(Resume resume, int position) {
+        position = -position - 1;               //insertion point transformation got from binarySearch()
         if (storage[position] != null) {        //shift array right by one element if new element is occupied
             System.arraycopy(storage, position, storage, position + 1, size - position);
         }
-        return position;
+        storage[position] = resume;
     }
 
+    protected void deleteElement(int position) {
+        System.arraycopy(storage, position + 1, storage, position, size - position - 1);    //shift array left by one element
+    }
 }

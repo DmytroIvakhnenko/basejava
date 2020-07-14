@@ -17,7 +17,12 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected int rightShift(int position) {
-        return size;
+    protected void saveElement(Resume resume, int position) {
+        storage[size] = resume;
+    }
+
+    protected void deleteElement(int position) {
+        storage[position] = storage[size - 1];
+        storage[size - 1] = null;
     }
 }

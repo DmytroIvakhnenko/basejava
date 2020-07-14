@@ -8,9 +8,9 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage implements Storage {
-    protected static final int MAX_STORAGE_SIZE = 10_000;
-    protected final Resume[] storage = new Resume[MAX_STORAGE_SIZE];
-    protected int size = 0;
+    static final int MAX_STORAGE_SIZE = 10_000;
+    final Resume[] storage = new Resume[MAX_STORAGE_SIZE];
+    int size = 0;
 
     public int size() {
         return size;
@@ -34,8 +34,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (position >= 0) {
             System.out.println("Resume with id:'" + resume.getUuid() + "' was found in resume storage, saving was unsuccessful!");
         } else {
-            position = rightShift(position);
-            storage[position] = resume;
+            saveElement(resume, position);
             size++;
         }
     }
@@ -52,10 +51,8 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int position = findIndex(uuid);
         if (position >= 0) {
-            if (size - position - 1 >= 0) {     //shift array left by one element
-                System.arraycopy(storage, position + 1, storage, position, size - position - 1);
-                size--;
-            }
+            deleteElement(position);
+            size--;
         } else {
             System.out.println("Resume with id:'" + uuid + "' wasn't found in resume storage, deletion was unsuccessful!\n");
         }
@@ -75,5 +72,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract int findIndex(String uuid);
 
-    protected abstract int rightShift(int position);
+    protected abstract void saveElement(Resume resume, int position);
+
+    protected abstract void deleteElement(int position);
 }
