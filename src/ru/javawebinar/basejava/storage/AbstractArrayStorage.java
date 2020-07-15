@@ -52,6 +52,7 @@ public abstract class AbstractArrayStorage implements Storage {
         int position = findIndex(uuid);
         if (position >= 0) {
             deleteElement(position);
+            storage[size - 1] = null;
             size--;
         } else {
             System.out.println("Resume with id:'" + uuid + "' wasn't found in resume storage, deletion was unsuccessful!\n");
