@@ -27,16 +27,11 @@ public class MainTestArrayStorage {
     }
 
     public static void Test(AbstractArrayStorage storage) {
-        Resume r1 = new Resume();
-        r1.setUuid("uuid1");
-        Resume r2 = new Resume();
-        r2.setUuid("uuid2");
-        Resume r3 = new Resume();
-        r3.setUuid("uuid3");
-        Resume r6 = new Resume();
-        r6.setUuid("uuid6");
-        Resume r7 = new Resume();
-        r7.setUuid("uuid7");
+        Resume r1 = new Resume("uuid1");
+        Resume r2 = new Resume("uuid2");
+        Resume r3 = new Resume("uuid3");
+        Resume r6 = new Resume("uuid6");
+        Resume r7 = new Resume("uuid7");
 
         storage.save(r6);
         storage.save(r1);
@@ -55,11 +50,10 @@ public class MainTestArrayStorage {
         storage.delete(r7.getUuid());
         printAll(storage);
 
-        Resume r4 = new Resume();
-        r4.setUuid("uuid4");
+        Resume r4 = new Resume("uuid4");
         storage.update(r4);
-        r4.setUuid("uuid2");
-        storage.update(r4);
+        Resume r4copy = new Resume("uuid2");
+        storage.update(r4copy);
 
         printAll(storage);
         storage.clear();

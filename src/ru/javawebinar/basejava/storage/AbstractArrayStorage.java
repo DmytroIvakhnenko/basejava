@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NonExistStorageException;
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -21,18 +24,16 @@ public abstract class AbstractArrayStorage implements Storage {
         if (position >= 0) {
             return storage[position];
         }
-        System.out.println("Resume with id:'" + uuid + "' wasn't found in resume storage!");
-        return null;
+        throw new NonExistStorageException(uuid);
     }
 
     public void save(Resume resume) {
-        if (size == MAX_STORAGE_SIZE - 1) {
-            System.out.println("Maximum number of saved resumes is reached, saving was unsuccessful!");
-            return;
+        if (size == MAX_STORAGE_SIZE) {
+            throw new StorageException("Storage overflow, size:" + size + " max size:" + MAX_STORAGE_SIZE, resume.getUuid());
         }
         int position = findIndex(resume.getUuid());
         if (position >= 0) {
-            System.out.println("Resume with id:'" + resume.getUuid() + "' was found in resume storage, saving was unsuccessful!");
+            throw new ExistStorageException(resume.getUuid());
         } else {
             saveElement(resume, position);
             size++;
@@ -44,7 +45,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (position >= 0) {
             storage[position] = resume;
         } else {
-            System.out.println("Resume with id:'" + resume.getUuid() + "' wasn't found in resume storage, update was unsuccessful!");
+            throw new NonExistStorageException(resume.getUuid());
         }
     }
 
@@ -55,7 +56,7 @@ public abstract class AbstractArrayStorage implements Storage {
             storage[size - 1] = null;
             size--;
         } else {
-            System.out.println("Resume with id:'" + uuid + "' wasn't found in resume storage, deletion was unsuccessful!\n");
+            throw new NonExistStorageException(uuid);
         }
     }
 
