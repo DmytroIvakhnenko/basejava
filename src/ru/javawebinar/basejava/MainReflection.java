@@ -19,7 +19,7 @@ public class MainReflection {
         Method[] methods = resume.getClass().getDeclaredMethods();
         for (Method method : methods) {
             if (method.getName().equals("toString")) {
-                System.out.println(method.invoke(resume, null));
+                System.out.println(method.invoke(resume));
             }
         }
     }

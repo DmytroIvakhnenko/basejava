@@ -28,7 +28,7 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void save(Resume resume) {
-        if (size == MAX_STORAGE_SIZE) {
+        if (size >= MAX_STORAGE_SIZE) {
             throw new StorageException("Storage overflow, size:" + size + " max size:" + MAX_STORAGE_SIZE, resume.getUuid());
         }
         int position = findIndex(resume.getUuid());
