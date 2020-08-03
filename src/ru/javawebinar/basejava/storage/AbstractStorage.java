@@ -5,18 +5,11 @@ import ru.javawebinar.basejava.exception.NonExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    int size = 0;
-
-    @Override
-    public void clear() {
-        this.deleteAllElements();
-        size = 0;
-    }
 
     @Override
     public void update(Resume r) {
-        if (this.contains(r.getUuid())) {
-            this.updateElement(r);
+        if (getPointer(r.getUuid()) != null) {
+            updateElement(r);
         } else {
             throw new NonExistStorageException(r.getUuid());
         }
@@ -24,47 +17,31 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        if (this.contains(r.getUuid())) {
+        if (getPointer(r.getUuid()) != null) {
             throw new ExistStorageException(r.getUuid());
         } else {
-            this.saveElement(r);
-            size++;
+            saveElement(r);
         }
     }
 
     @Override
     public Resume get(String uuid) {
-        if (this.contains(uuid)) {
-            return this.getElement(uuid);
+        if (getPointer(uuid) != null) {
+            return getElement(uuid);
         }
         throw new NonExistStorageException(uuid);
     }
 
     @Override
     public void delete(String uuid) {
-        if (this.contains(uuid)) {
-            this.deleteElement(uuid);
-            size--;
+        if (getPointer(uuid) != null) {
+            deleteElement(uuid);
         } else {
             throw new NonExistStorageException(uuid);
         }
     }
 
-    @Override
-    public Resume[] getAll() {
-        return this.getAllElements();
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    protected abstract void deleteAllElements();
-
-    protected abstract Resume[] getAllElements();
-
-    protected abstract boolean contains(String uuid);
+    protected abstract AbstractStoragePointer getPointer(String uuid);
 
     protected abstract Resume getElement(String uuid);
 
@@ -73,4 +50,22 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void updateElement(Resume resume);
 
     protected abstract void deleteElement(String uuid);
+}
+
+class AbstractStoragePointer {
+    final int index;
+    final Resume resume;
+
+    public AbstractStoragePointer(int index, Resume resume) {
+        this.index = index;
+        this.resume = resume;
+    }
+
+    public int getIntIndex() {
+        return index;
+    }
+
+    public Resume getResumeIndex() {
+        return resume;
+    }
 }
