@@ -14,43 +14,38 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     int size = 0;
 
     @Override
+    protected boolean contains(Object elementPointer) {
+        return (Integer) elementPointer >= 0;
+    }
+
+    @Override
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     @Override
-    protected AbstractStoragePointer getPointer(String uuid) {
-        int result = findIndex(uuid);
-        if (result >= 0) {
-            return new AbstractStoragePointer(result, null);
-        } else {
-            return null;
-        }
+    protected Resume doGet(Object elementPointer) {
+        return storage[(Integer) elementPointer];
     }
 
     @Override
-    protected Resume getElement(String uuid) {
-        return storage[findIndex(uuid)];
-    }
-
-    @Override
-    protected void saveElement(Resume resume) {
+    protected void doSave(Resume resume, Object elementPointer) {
         if (size >= MAX_STORAGE_SIZE) {
             throw new StorageException("Storage overflow, size:" + size + " max size:" + MAX_STORAGE_SIZE, resume.getUuid());
         }
-        saveElement(resume, findIndex(resume.getUuid()));
+        saveElement(resume, (Integer) elementPointer);
         size++;
     }
 
     @Override
-    protected void updateElement(Resume resume) {
-        storage[findIndex(resume.getUuid())] = resume;
+    protected void doUpdate(Resume resume, Object elementPointer) {
+        storage[(Integer) elementPointer] = resume;
     }
 
     @Override
-    protected void deleteElement(String uuid) {
-        deleteElement(findIndex(uuid));
+    protected void doDelete(Object elementPointer) {
+        deleteElement((Integer) elementPointer);
         storage[size - 1] = null;
         size--;
     }
@@ -65,7 +60,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    protected abstract int findIndex(String uuid);
+    @Override
+    protected abstract Integer getElementPointer(String uuid);
 
     protected abstract void saveElement(Resume resume, int position);
 

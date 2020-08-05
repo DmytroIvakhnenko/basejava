@@ -11,7 +11,7 @@ import ru.javawebinar.basejava.model.Resume;
 import static ru.javawebinar.basejava.storage.AbstractArrayStorage.MAX_STORAGE_SIZE;
 
 public abstract class AbstractArrayStorageTest {
-    private Storage storage;
+    private final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";

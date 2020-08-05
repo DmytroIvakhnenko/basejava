@@ -9,37 +9,36 @@ public class ListStorage extends AbstractStorage {
     List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected AbstractStoragePointer getPointer(String uuid) {
-        int result = storage.indexOf(new Resume(uuid));
-        if (result >= 0) {
-            return new AbstractStoragePointer(result, null);
-        } else {
-            return null;
-        }
+    protected boolean contains(Object elementPointer) {
+        return (Integer) elementPointer >= 0;
     }
 
     @Override
-    protected Resume getElement(String uuid) {
-        AbstractStoragePointer p = getPointer(uuid);
-        return storage.get(p.getIntIndex());
+    protected Integer getElementPointer(String uuid) {
+        return storage.indexOf(new Resume(uuid));
     }
 
     @Override
-    protected void saveElement(Resume resume) {
+    protected Resume doGet(Object elementPointer) {
+        return storage.get((Integer) elementPointer);
+    }
+
+    @Override
+    protected void doSave(Resume resume, Object elementPointer) {
         storage.add(resume);
     }
 
     @Override
-    protected void updateElement(Resume resume) {
-        AbstractStoragePointer p = getPointer(resume.getUuid());
-        storage.remove(p.getIntIndex());
-        storage.add(p.getIntIndex(), resume);
+    protected void doUpdate(Resume resume, Object elementPointer) {
+        int index = (Integer) elementPointer;
+        storage.remove(index);
+        storage.add(index, resume);
     }
 
     @Override
-    protected void deleteElement(String uuid) {
-        AbstractStoragePointer p = getPointer(uuid);
-        storage.remove(p.getIntIndex());
+    protected void doDelete(Object elementPointer) {
+        int index = (Integer) elementPointer;
+        storage.remove(index);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(new Resume[storage.size()]);
+        return storage.toArray(new Resume[0]);
     }
 
     @Override

@@ -8,8 +8,9 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        if (getPointer(r.getUuid()) != null) {
-            updateElement(r);
+        Object elementPointer = getElementPointer(r.getUuid());
+        if (contains(elementPointer)) {
+            doUpdate(r, elementPointer);
         } else {
             throw new NonExistStorageException(r.getUuid());
         }
@@ -17,55 +18,42 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        if (getPointer(r.getUuid()) != null) {
+        Object elementPointer = getElementPointer(r.getUuid());
+        if (contains(elementPointer)) {
             throw new ExistStorageException(r.getUuid());
         } else {
-            saveElement(r);
+            doSave(r, elementPointer);
         }
     }
 
     @Override
     public Resume get(String uuid) {
-        if (getPointer(uuid) != null) {
-            return getElement(uuid);
+        Object elementPointer = getElementPointer(uuid);
+        if (contains(elementPointer)) {
+            return doGet(elementPointer);
         }
         throw new NonExistStorageException(uuid);
     }
 
     @Override
     public void delete(String uuid) {
-        if (getPointer(uuid) != null) {
-            deleteElement(uuid);
+        Object elementPointer = getElementPointer(uuid);
+        if (contains(elementPointer)) {
+            doDelete(elementPointer);
         } else {
             throw new NonExistStorageException(uuid);
         }
     }
 
-    protected abstract AbstractStoragePointer getPointer(String uuid);
+    protected abstract boolean contains(Object elementPointer);
 
-    protected abstract Resume getElement(String uuid);
+    protected abstract Object getElementPointer(String uuid);
 
-    protected abstract void saveElement(Resume resume);
+    protected abstract Resume doGet(Object elementPointer);
 
-    protected abstract void updateElement(Resume resume);
+    protected abstract void doSave(Resume resume, Object elementPointer);
 
-    protected abstract void deleteElement(String uuid);
-}
+    protected abstract void doUpdate(Resume resume, Object elementPointer);
 
-class AbstractStoragePointer {
-    final int index;
-    final Resume resume;
-
-    public AbstractStoragePointer(int index, Resume resume) {
-        this.index = index;
-        this.resume = resume;
-    }
-
-    public int getIntIndex() {
-        return index;
-    }
-
-    public Resume getResumeIndex() {
-        return resume;
-    }
+    protected abstract void doDelete(Object elementPointer);
 }
