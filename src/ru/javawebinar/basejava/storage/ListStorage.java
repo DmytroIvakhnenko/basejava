@@ -9,8 +9,8 @@ public class ListStorage extends AbstractStorage {
     List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected boolean contains(Object elementPointer) {
-        return (Integer) elementPointer >= 0;
+    protected boolean contains(Object index) {
+        return (Integer) index >= 0;
     }
 
     @Override
@@ -19,26 +19,23 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object elementPointer) {
-        return storage.get((Integer) elementPointer);
+    protected Resume doGet(Object index) {
+        return storage.get((Integer) index);
     }
 
     @Override
-    protected void doSave(Resume resume, Object elementPointer) {
+    protected void doSave(Resume resume, Object index) {
         storage.add(resume);
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object elementPointer) {
-        int index = (Integer) elementPointer;
-        storage.remove(index);
-        storage.add(index, resume);
+    protected void doUpdate(Resume resume, Object index) {
+        storage.set((Integer) index, resume);
     }
 
     @Override
-    protected void doDelete(Object elementPointer) {
-        int index = (Integer) elementPointer;
-        storage.remove(index);
+    protected void doDelete(Object index) {
+        storage.remove(((Integer) index).intValue());
     }
 
     @Override

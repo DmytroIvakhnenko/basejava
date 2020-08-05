@@ -8,41 +8,42 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        Object elementPointer = getElementPointer(r.getUuid());
-        if (contains(elementPointer)) {
-            doUpdate(r, elementPointer);
-        } else {
-            throw new NonExistStorageException(r.getUuid());
-        }
+        Object elementPointer = getExistElementPointer(r.getUuid());
+        doUpdate(r, elementPointer);
     }
 
     @Override
     public void save(Resume r) {
-        Object elementPointer = getElementPointer(r.getUuid());
-        if (contains(elementPointer)) {
-            throw new ExistStorageException(r.getUuid());
-        } else {
-            doSave(r, elementPointer);
-        }
+        Object elementPointer = getNonExistElementPointer(r.getUuid());
+        doSave(r, elementPointer);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object elementPointer = getElementPointer(uuid);
-        if (contains(elementPointer)) {
-            return doGet(elementPointer);
-        }
-        throw new NonExistStorageException(uuid);
+        Object elementPointer = getExistElementPointer(uuid);
+        return doGet(elementPointer);
     }
 
     @Override
     public void delete(String uuid) {
+        Object elementPointer = getExistElementPointer(uuid);
+        doDelete(elementPointer);
+    }
+
+    private Object getExistElementPointer(String uuid) {
         Object elementPointer = getElementPointer(uuid);
-        if (contains(elementPointer)) {
-            doDelete(elementPointer);
-        } else {
+        if (!contains(elementPointer)) {
             throw new NonExistStorageException(uuid);
         }
+        return elementPointer;
+    }
+
+    private Object getNonExistElementPointer(String uuid) {
+        Object elementPointer = getElementPointer(uuid);
+        if (contains(elementPointer)) {
+            throw new ExistStorageException(uuid);
+        }
+        return elementPointer;
     }
 
     protected abstract boolean contains(Object elementPointer);

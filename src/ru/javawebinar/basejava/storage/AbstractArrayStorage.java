@@ -14,8 +14,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     int size = 0;
 
     @Override
-    protected boolean contains(Object elementPointer) {
-        return (Integer) elementPointer >= 0;
+    protected boolean contains(Object index) {
+        return (Integer) index >= 0;
     }
 
     @Override
@@ -25,27 +25,27 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object elementPointer) {
-        return storage[(Integer) elementPointer];
+    protected Resume doGet(Object index) {
+        return storage[(Integer) index];
     }
 
     @Override
-    protected void doSave(Resume resume, Object elementPointer) {
+    protected void doSave(Resume resume, Object index) {
         if (size >= MAX_STORAGE_SIZE) {
             throw new StorageException("Storage overflow, size:" + size + " max size:" + MAX_STORAGE_SIZE, resume.getUuid());
         }
-        saveElement(resume, (Integer) elementPointer);
+        saveElement(resume, (Integer) index);
         size++;
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object elementPointer) {
-        storage[(Integer) elementPointer] = resume;
+    protected void doUpdate(Resume resume, Object index) {
+        storage[(Integer) index] = resume;
     }
 
     @Override
-    protected void doDelete(Object elementPointer) {
-        deleteElement((Integer) elementPointer);
+    protected void doDelete(Object index) {
+        deleteElement((Integer) index);
         storage[size - 1] = null;
         size--;
     }
