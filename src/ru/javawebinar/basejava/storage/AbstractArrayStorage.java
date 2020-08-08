@@ -14,7 +14,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     int size = 0;
 
     @Override
-    protected boolean contains(Object index) {
+    protected boolean isElementFound(Object index) {
         return (Integer) index >= 0;
     }
 

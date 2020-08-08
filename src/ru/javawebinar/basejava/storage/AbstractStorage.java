@@ -32,7 +32,7 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getExistElementPointer(String uuid) {
         Object elementPointer = getElementPointer(uuid);
-        if (!contains(elementPointer)) {
+        if (!isElementFound(elementPointer)) {
             throw new NonExistStorageException(uuid);
         }
         return elementPointer;
@@ -40,13 +40,13 @@ public abstract class AbstractStorage implements Storage {
 
     private Object getNonExistElementPointer(String uuid) {
         Object elementPointer = getElementPointer(uuid);
-        if (contains(elementPointer)) {
+        if (isElementFound(elementPointer)) {
             throw new ExistStorageException(uuid);
         }
         return elementPointer;
     }
 
-    protected abstract boolean contains(Object elementPointer);
+    protected abstract boolean isElementFound(Object elementPointer);
 
     protected abstract Object getElementPointer(String uuid);
 

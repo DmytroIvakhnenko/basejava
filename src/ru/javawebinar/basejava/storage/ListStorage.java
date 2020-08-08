@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    List<Resume> storage = new ArrayList<>();
+    private final List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected boolean contains(Object index) {
+    protected boolean isElementFound(Object index) {
         return (Integer) index >= 0;
     }
 
