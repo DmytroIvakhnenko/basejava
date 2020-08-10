@@ -2,10 +2,12 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
-public class MapStorage extends AbstractStorage {
+public class MapStorageResumeKey extends AbstractStorage {
     private final Map<String, Resume> storage = new TreeMap<>();
 
     @Override
@@ -14,13 +16,13 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected String getElementPointer(String uuid) {
-        return storage.containsKey(uuid) ? uuid : null;
+    protected Resume getElementPointer(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
     protected Resume doGet(Object elementPointer) {
-        return storage.get(elementPointer);
+        return (Resume) elementPointer;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doDelete(Object elementPointer) {
-        storage.remove(elementPointer);
+        storage.remove(((Resume) elementPointer).getUuid());
     }
 
     @Override
@@ -44,8 +46,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        return storage.values().stream().sorted().collect(Collectors.toList());
     }
 
     @Override

@@ -64,7 +64,7 @@ public class MainTestArrayStorage {
 
     static void printAll(AbstractArrayStorage storage) {
         System.out.println("\nGet All");
-        for (Resume r : storage.getAll()) {
+        for (Resume r : storage.getAllSorted()) {
             System.out.println(r);
         }
     }
