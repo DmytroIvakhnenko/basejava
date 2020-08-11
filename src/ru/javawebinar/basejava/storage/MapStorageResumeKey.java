@@ -2,13 +2,12 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MapStorageResumeKey extends AbstractStorage {
-    private final Map<String, Resume> storage = new TreeMap<>();
+    private final Map<String, Resume> storage = new HashMap<>();
 
     @Override
     protected boolean isElementFound(Object elementPointer) {
@@ -46,8 +45,8 @@ public class MapStorageResumeKey extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        return storage.values().stream().sorted().collect(Collectors.toList());
+    protected Stream<Resume> doGetAll() {
+        return storage.values().stream();
     }
 
     @Override

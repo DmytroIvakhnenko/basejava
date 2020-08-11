@@ -3,9 +3,8 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MapStorageUuidKey extends AbstractStorage {
     private final Map<String, Resume> storage = new HashMap<>();
@@ -46,8 +45,8 @@ public class MapStorageUuidKey extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        return storage.values().stream().sorted().collect(Collectors.toList());
+    protected Stream<Resume> doGetAll() {
+        return storage.values().stream();
     }
 
     @Override

@@ -4,6 +4,10 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NonExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public abstract class AbstractStorage implements Storage {
 
     @Override
@@ -46,11 +50,18 @@ public abstract class AbstractStorage implements Storage {
         return elementPointer;
     }
 
+    @Override
+    public List<Resume> getAllSorted() {
+        return doGetAll().sorted().collect(Collectors.toList());
+    }
+
     protected abstract boolean isElementFound(Object elementPointer);
 
     protected abstract Object getElementPointer(String uuid);
 
     protected abstract Resume doGet(Object elementPointer);
+
+    protected abstract Stream<Resume> doGetAll();
 
     protected abstract void doSave(Resume resume, Object elementPointer);
 
