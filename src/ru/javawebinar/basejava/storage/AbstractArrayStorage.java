@@ -10,14 +10,14 @@ import java.util.stream.Stream;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     static final int MAX_STORAGE_SIZE = 10_000;
     final Resume[] storage = new Resume[MAX_STORAGE_SIZE];
     int size = 0;
 
     @Override
-    protected boolean isElementFound(Object index) {
-        return (Integer) index >= 0;
+    protected boolean isElementFound(Integer index) {
+        return index >= 0;
     }
 
     @Override
@@ -27,27 +27,27 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object index) {
-        return storage[(Integer) index];
+    protected Resume doGet(Integer index) {
+        return storage[index];
     }
 
     @Override
-    protected void doSave(Resume resume, Object index) {
+    protected void doSave(Resume resume, Integer index) {
         if (size >= MAX_STORAGE_SIZE) {
             throw new StorageException("Storage overflow, size:" + size + " max size:" + MAX_STORAGE_SIZE, resume.getUuid());
         }
-        saveElement(resume, (Integer) index);
+        saveElement(resume, index);
         size++;
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object index) {
-        storage[(Integer) index] = resume;
+    protected void doUpdate(Resume resume, Integer index) {
+        storage[index] = resume;
     }
 
     @Override
-    protected void doDelete(Object index) {
-        deleteElement((Integer) index);
+    protected void doDelete(Integer index) {
+        deleteElement(index);
         storage[size - 1] = null;
         size--;
     }

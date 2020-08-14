@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class MapStorageUuidKey extends AbstractStorage {
+public class MapStorageUuidKey extends AbstractStorage<String> {
     private final Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected boolean isElementFound(Object elementPointer) {
+    protected boolean isElementFound(String elementPointer) {
         return elementPointer != null;
     }
 
@@ -20,22 +20,22 @@ public class MapStorageUuidKey extends AbstractStorage {
     }
 
     @Override
-    protected Resume doGet(Object elementPointer) {
+    protected Resume doGet(String elementPointer) {
         return storage.get(elementPointer);
     }
 
     @Override
-    protected void doSave(Resume resume, Object elementPointer) {
+    protected void doSave(Resume resume, String elementPointer) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object elementPointer) {
+    protected void doUpdate(Resume resume, String elementPointer) {
         storage.replace(resume.getUuid(), resume);
     }
 
     @Override
-    protected void doDelete(Object elementPointer) {
+    protected void doDelete(String elementPointer) {
         storage.remove(elementPointer);
     }
 

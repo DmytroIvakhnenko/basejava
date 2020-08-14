@@ -8,46 +8,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class AbstractStorage implements Storage {
-
-    @Override
-    public void update(Resume r) {
-        Object elementPointer = getExistElementPointer(r.getUuid());
-        doUpdate(r, elementPointer);
-    }
+public abstract class AbstractStorage<SK> implements Storage {
 
     @Override
     public void save(Resume r) {
-        Object elementPointer = getNonExistElementPointer(r.getUuid());
+        SK elementPointer = getNonExistElementPointer(r.getUuid());
         doSave(r, elementPointer);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object elementPointer = getExistElementPointer(uuid);
+        SK elementPointer = getExistElementPointer(uuid);
         return doGet(elementPointer);
     }
 
     @Override
+    public void update(Resume r) {
+        SK elementPointer = getExistElementPointer(r.getUuid());
+        doUpdate(r, elementPointer);
+    }
+
+    @Override
     public void delete(String uuid) {
-        Object elementPointer = getExistElementPointer(uuid);
+        SK elementPointer = getExistElementPointer(uuid);
         doDelete(elementPointer);
-    }
-
-    private Object getExistElementPointer(String uuid) {
-        Object elementPointer = getElementPointer(uuid);
-        if (!isElementFound(elementPointer)) {
-            throw new NonExistStorageException(uuid);
-        }
-        return elementPointer;
-    }
-
-    private Object getNonExistElementPointer(String uuid) {
-        Object elementPointer = getElementPointer(uuid);
-        if (isElementFound(elementPointer)) {
-            throw new ExistStorageException(uuid);
-        }
-        return elementPointer;
     }
 
     @Override
@@ -55,17 +39,33 @@ public abstract class AbstractStorage implements Storage {
         return doGetAll().sorted().collect(Collectors.toList());
     }
 
-    protected abstract boolean isElementFound(Object elementPointer);
+    protected abstract boolean isElementFound(SK elementPointer);
 
-    protected abstract Object getElementPointer(String uuid);
+    protected abstract SK getElementPointer(String uuid);
 
-    protected abstract Resume doGet(Object elementPointer);
+    protected abstract Resume doGet(SK elementPointer);
 
     protected abstract Stream<Resume> doGetAll();
 
-    protected abstract void doSave(Resume resume, Object elementPointer);
+    protected abstract void doSave(Resume resume, SK elementPointer);
 
-    protected abstract void doUpdate(Resume resume, Object elementPointer);
+    protected abstract void doUpdate(Resume resume, SK elementPointer);
 
-    protected abstract void doDelete(Object elementPointer);
+    protected abstract void doDelete(SK elementPointer);
+
+    private SK getExistElementPointer(String uuid) {
+        SK elementPointer = getElementPointer(uuid);
+        if (!isElementFound(elementPointer)) {
+            throw new NonExistStorageException(uuid);
+        }
+        return elementPointer;
+    }
+
+    private SK getNonExistElementPointer(String uuid) {
+        SK elementPointer = getElementPointer(uuid);
+        if (isElementFound(elementPointer)) {
+            throw new ExistStorageException(uuid);
+        }
+        return elementPointer;
+    }
 }
