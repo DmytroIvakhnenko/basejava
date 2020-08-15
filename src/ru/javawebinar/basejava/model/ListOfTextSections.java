@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ResumeListOfTextSections extends AbstractResumeTextSection {
-    private final List<AbstractResumeTextSection> list;
+public class ListOfTextSections extends TextSection {
+    private final List<TextSection> list;
 
-    public ResumeListOfTextSections() {
+    public ListOfTextSections() {
         list = new ArrayList<>();
     }
 
-    public ResumeListOfTextSections(String title) {
+    public ListOfTextSections(String title) {
         this();
         super.setSectionTitle(title);
     }
 
-    public void saveItem(AbstractResumeTextSection singleText) {
+    public void saveItem(TextSection singleText) {
         Objects.requireNonNull(singleText);
         list.add(singleText);
     }
 
-    public void deleteItem(AbstractResumeTextSection singleText) {
+    public void deleteItem(TextSection singleText) {
         Objects.requireNonNull(singleText);
         list.remove(singleText);
     }
@@ -30,11 +30,11 @@ public class ResumeListOfTextSections extends AbstractResumeTextSection {
         list.clear();
     }
 
-    public AbstractResumeTextSection getItem(int index) {
+    public TextSection getItem(int index) {
         return list.get(index);
     }
 
-    public List<AbstractResumeTextSection> getAllItems() {
+    public List<TextSection> getAllItems() {
         return new ArrayList<>(list);
     }
 
@@ -43,7 +43,7 @@ public class ResumeListOfTextSections extends AbstractResumeTextSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ResumeListOfTextSections that = (ResumeListOfTextSections) o;
+        ListOfTextSections that = (ListOfTextSections) o;
 
         return list.equals(that.list);
     }
@@ -55,7 +55,6 @@ public class ResumeListOfTextSections extends AbstractResumeTextSection {
 
     @Override
     public String toString() {
-        String title = super.getSectionTitle();
-        return (title != null ? title + " " : "") + list.toString();
+        return super.toString() + " " + list.toString();
     }
 }

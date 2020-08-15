@@ -13,9 +13,20 @@ public class Resume implements Comparable<Resume> {
     private final String uuid; // Unique identifier
     private final String fullName;
 
-    private final Map<ResumeSectionType, AbstractResumeTextSection> resumeContent;
+    private final Map<ResumeSectionType, TextSection> resumeContent;
+    private final Map<String, String> contacts;
 
-    public void addSection(ResumeSectionType type, AbstractResumeTextSection textSection) {
+    public void addContact (String type, String contact){
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(contact);
+        contacts.put(type, contact);
+    }
+
+    public Map<String, String> getAllContacts() {
+        return contacts;
+    }
+
+    public void addSection(ResumeSectionType type, TextSection textSection) {
         Objects.requireNonNull(textSection);
         resumeContent.put(type, textSection);
     }
@@ -28,11 +39,11 @@ public class Resume implements Comparable<Resume> {
         resumeContent.clear();
     }
 
-    public AbstractResumeTextSection getSection(ResumeSectionType type) {
+    public TextSection getSection(ResumeSectionType type) {
         return resumeContent.get(type);
     }
 
-    public Map<ResumeSectionType, AbstractResumeTextSection> getAllSections() {
+    public Map<ResumeSectionType, TextSection> getAllSections() {
         return resumeContent;
     }
 
@@ -46,6 +57,7 @@ public class Resume implements Comparable<Resume> {
         this.uuid = uuid;
         this.fullName = fullName;
         resumeContent = new HashMap<>();
+        contacts = new HashMap<>();
     }
 
     public String getUuid() {
