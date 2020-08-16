@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ListOfTextSections extends TextSection {
-  private final List<TextSection> list;
+public class ListOfTextSections extends AbstractTextSection {
+  private final List<AbstractTextSection> list;
 
   public ListOfTextSections() {
     list = new ArrayList<>();
@@ -13,15 +13,15 @@ public class ListOfTextSections extends TextSection {
 
   public ListOfTextSections(String title) {
     this();
-    super.setSectionTitle(title);
+    super.setTitle(title);
   }
 
-  public void saveItem(TextSection singleText) {
+  public void addItem(AbstractTextSection singleText) {
     Objects.requireNonNull(singleText);
     list.add(singleText);
   }
 
-  public void deleteItem(TextSection singleText) {
+  public void deleteItem(AbstractTextSection singleText) {
     Objects.requireNonNull(singleText);
     list.remove(singleText);
   }
@@ -30,11 +30,11 @@ public class ListOfTextSections extends TextSection {
     list.clear();
   }
 
-  public TextSection getItem(int index) {
+  public AbstractTextSection getItem(int index) {
     return list.get(index);
   }
 
-  public List<TextSection> getAllItems() {
+  public List<AbstractTextSection> getAllItems() {
     return new ArrayList<>(list);
   }
 

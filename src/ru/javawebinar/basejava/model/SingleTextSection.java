@@ -1,19 +1,19 @@
 package ru.javawebinar.basejava.model;
 
-public class SingleTextSection extends TextSection {
-  private final String sectionText;
+public class SingleTextSection extends AbstractTextSection {
+  private final String text;
 
-  public SingleTextSection(String sectionTitle, String sectionText) {
-    this.sectionText = sectionText;
-    super.setSectionTitle(sectionTitle);
+  public SingleTextSection(String title, String text) {
+    this.text = text;
+    super.setTitle(title);
   }
 
-  public SingleTextSection(String sectionText) {
-    this.sectionText = sectionText;
+  public SingleTextSection(String text) {
+    this.text = text;
   }
 
-  public String getSectionText() {
-    return sectionText;
+  public String getText() {
+    return text;
   }
 
   @Override
@@ -23,16 +23,16 @@ public class SingleTextSection extends TextSection {
 
     SingleTextSection that = (SingleTextSection) o;
 
-    return sectionText.equals(that.sectionText);
+    return text.equals(that.text);
   }
 
   @Override
   public int hashCode() {
-    return sectionText.hashCode();
+    return text.hashCode();
   }
 
   @Override
   public String toString() {
-    return super.toString() + " " + getSectionText();
+    return super.toString() + getText();
   }
 }

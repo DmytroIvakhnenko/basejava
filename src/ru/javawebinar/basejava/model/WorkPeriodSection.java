@@ -1,38 +1,44 @@
 package ru.javawebinar.basejava.model;
 
+import java.time.YearMonth;
 import java.util.Objects;
 
 public class WorkPeriodSection extends SingleTextSection {
-  private final String startDate;
-  private final String endDate;
+  private final YearMonth startDate;
+  private final YearMonth endDate;
   private String position;
 
   public WorkPeriodSection(
-      String sectionTitle, String sectionText, String startDate, String endDate, String position) {
+      String sectionTitle,
+      String sectionText,
+      YearMonth startDate,
+      YearMonth endDate,
+      String position) {
     super(sectionTitle, sectionText);
     this.startDate = startDate;
     this.endDate = endDate;
     this.position = position;
   }
 
-  public WorkPeriodSection(String sectionText, String startDate, String endDate, String position) {
+  public WorkPeriodSection(
+      String sectionText, YearMonth startDate, YearMonth endDate, String position) {
     super(sectionText);
     this.startDate = startDate;
     this.endDate = endDate;
     this.position = position;
   }
 
-  public WorkPeriodSection(String sectionText, String startDate, String endDate) {
+  public WorkPeriodSection(String sectionText, YearMonth startDate, YearMonth endDate) {
     super(sectionText);
     this.startDate = startDate;
     this.endDate = endDate;
   }
 
-  public String getStartDate() {
+  public YearMonth getStartDate() {
     return startDate;
   }
 
-  public String getEndDate() {
+  public YearMonth getEndDate() {
     return endDate;
   }
 

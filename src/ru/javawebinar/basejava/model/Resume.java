@@ -11,25 +11,33 @@ public class Resume implements Comparable<Resume> {
   private final String uuid; // Unique identifier
   private final String fullName;
 
-  private final Map<ResumeSectionType, TextSection> resumeContent;
-  private final Map<String, String> contacts;
+  private final Map<ResumeSectionType, AbstractTextSection> resumeContent;
+  private final Map<ContactType, String> contacts;
 
-  public void addContact(String type, String contact) {
+  public void addContact(ContactType type, String contact) {
     Objects.requireNonNull(type);
     Objects.requireNonNull(contact);
     contacts.put(type, contact);
   }
 
-  public Map<String, String> getAllContacts() {
+  public void deleteContact(ContactType type, String contact) {
+    Objects.requireNonNull(type);
+    Objects.requireNonNull(contact);
+    contacts.remove(type, contact);
+  }
+
+  public Map<ContactType, String> getAllContacts() {
     return contacts;
   }
 
-  public void addSection(ResumeSectionType type, TextSection textSection) {
-    Objects.requireNonNull(textSection);
-    resumeContent.put(type, textSection);
+  public void addSection(ResumeSectionType type, AbstractTextSection abstractTextSection) {
+    Objects.requireNonNull(type);
+    Objects.requireNonNull(abstractTextSection);
+    resumeContent.put(type, abstractTextSection);
   }
 
   public void deleteSection(ResumeSectionType type) {
+    Objects.requireNonNull(type);
     resumeContent.remove(type);
   }
 
@@ -37,11 +45,12 @@ public class Resume implements Comparable<Resume> {
     resumeContent.clear();
   }
 
-  public TextSection getSection(ResumeSectionType type) {
+  public AbstractTextSection getSection(ResumeSectionType type) {
+    Objects.requireNonNull(type);
     return resumeContent.get(type);
   }
 
-  public Map<ResumeSectionType, TextSection> getAllSections() {
+  public Map<ResumeSectionType, AbstractTextSection> getAllSections() {
     return resumeContent;
   }
 
