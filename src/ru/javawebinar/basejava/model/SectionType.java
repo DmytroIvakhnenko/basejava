@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-public enum ResumeSectionType {
+public enum SectionType {
     PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),
     ACHIEVEMENT("Достижения"),
@@ -10,7 +10,7 @@ public enum ResumeSectionType {
 
     private final String title;
 
-    ResumeSectionType(String title) {
+    SectionType(String title) {
         this.title = title;
     }
 

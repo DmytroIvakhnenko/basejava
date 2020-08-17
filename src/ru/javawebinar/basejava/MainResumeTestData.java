@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import static ru.javawebinar.basejava.model.ContactType.*;
-import static ru.javawebinar.basejava.model.ResumeSectionType.*;
+import static ru.javawebinar.basejava.model.SectionType.*;
 
 public class MainResumeTestData {
     public static Resume setTestData() {
@@ -24,7 +24,7 @@ public class MainResumeTestData {
         /*----------------------------------------------------------------------------------------------------------*/
         resume.addSection(OBJECTIVE, new SingleTextSection("Ведущий стажировок и ..."));
         /*----------------------------------------------------------------------------------------------------------*/
-        ListOfTextSections ach = new ListOfTextSections();
+        ListOfSections<SingleTextSection> ach = new ListOfSections<>();
         ach.addItem(new SingleTextSection("С 2013 года: ..."));
         ach.addItem(new SingleTextSection("Реализация двухфакторной ..."));
         ach.addItem(new SingleTextSection("Налаживание процесса ..."));
@@ -33,81 +33,90 @@ public class MainResumeTestData {
         ach.addItem(new SingleTextSection("Реализация протоколов ..."));
         resume.addSection(ACHIEVEMENT, ach);
         /*----------------------------------------------------------------------------------------------------------*/
-        ListOfTextSections qua = new ListOfTextSections();
+        ListOfSections<SingleTextSection> qua = new ListOfSections<>();
         qua.addItem(new SingleTextSection("JEE AS", "GlassFish (v2.1, v3), OC4J ..."));
         qua.addItem(new SingleTextSection("Version control", "Subversion, Git ..."));
         qua.addItem(new SingleTextSection("DB", "PostgreSQL(наследование ..."));
         qua.addItem(new SingleTextSection("Languages", "Java, Scala ..."));
         resume.addSection(QUALIFICATIONS, qua);
         /*----------------------------------------------------------------------------------------------------------*/
-        ListOfTextSections exp = new ListOfTextSections();
-        AbstractTextSection expLine1 =
-                new WorkPeriodSection(
-                        "Java Online Projects.",
-                        "Создание, организация ...",
+        ListOfSections<WorkExperience> exp = new ListOfSections<>();
+        WorkExperience expLine1 =
+                new WorkExperience(
                         YearMonth.parse("10/2013", format),
                         YearMonth.now(),
-                        "Автор проекта.");
-        AbstractTextSection expLine2 =
-                new WorkPeriodSection(
-                        "Wrike.",
-                        "Проектирование и разработка ...",
+                        "Автор проекта.",
+                        "Создание, организация ...",
+                        "Java Online Projects.",
+                        "https://javaops.ru/");
+        WorkExperience expLine2 =
+                new WorkExperience(
                         YearMonth.parse("10/2014", format),
                         YearMonth.parse("10/2016", format),
-                        "Старший разработчик (backend).");
-        AbstractTextSection expLine3 =
-                new WorkPeriodSection(
-                        "RIT Center.",
-                        "Организация процесса разработки ...",
+                        "Старший разработчик (backend).",
+                        "Проектирование и разработка ...",
+                        "Wrike.",
+                        "https://www.wrike.com/");
+        WorkExperience expLine3 =
+                new WorkExperience(
                         YearMonth.parse("04/2012", format),
                         YearMonth.parse("10/2014", format),
-                        "Java архитектор");
+                        "Java архитектор.",
+                        "Организация процесса разработки ...",
+                        "RIT Center.",
+                        null);
         exp.addItem(expLine1);
         exp.addItem(expLine2);
         exp.addItem(expLine3);
         resume.addSection(EXPERIENCE, exp);
         /*----------------------------------------------------------------------------------------------------------*/
-        ListOfTextSections edu = new ListOfTextSections();
-        AbstractTextSection eduLine1 =
-                new WorkPeriodSection(
-                        "Coursera",
-                        "Functional Programming ...",
+        ListOfSections<WorkExperience> edu = new ListOfSections<>();
+        WorkExperience eduLine1 =
+                new WorkExperience(
                         YearMonth.parse("03/2013", format),
                         YearMonth.parse("05/2013", format),
-                        null);
-        AbstractTextSection eduLine2 =
-                new WorkPeriodSection(
-                        "Luxoft",
-                        "Курс \"Объектно-ориентированный  ...",
+                        "Functional Programming ...",
+                        null,
+                        "Coursera",
+                        "https://www.coursera.org/learn/progfun1");
+        WorkExperience eduLine2 =
+                new WorkExperience(
                         YearMonth.parse("03/2011", format),
                         YearMonth.parse("04/2011", format),
-                        null);
-        AbstractTextSection eduLine3 =
-                new WorkPeriodSection(
-                        "Siemens AG",
-                        "3 месяца обучения мобильным ...",
+                        "Курс \"Объектно-ориентированный  ...",
+                        null,
+                        "Luxoft",
+                        "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html");
+        WorkExperience eduLine3 =
+                new WorkExperience(
                         YearMonth.parse("01/2005", format),
                         YearMonth.parse("04/2005", format),
-                        null);
-
-        ListOfTextSections eduList1 = new ListOfTextSections("Санкт-Петербургский национальный ...");
-        AbstractTextSection eduList1Line1 =
-                new WorkPeriodSection(
-                        "Аспирантура (программист С ...",
+                        "3 месяца обучения мобильным ...",
+                        null,
+                        "Siemens AG",
+                        "https://new.siemens.com/ru/ru.html"
+                );
+        WorkExperience eduLine4 =
+                new WorkExperience(
                         YearMonth.parse("09/1993", format),
-                        YearMonth.parse("07/1996", format));
-        AbstractTextSection eduList1Line2 =
-                new WorkPeriodSection(
-                        "Инженер (программист Fortran ...",
+                        YearMonth.parse("07/1996", format),
+                        "Аспирантура (программист С ...",
+                        null,
+                        "Санкт-Петербургский национальный ...",
+                        "https://itmo.ru/ru/");
+        WorkExperience eduLine5 =
+                new WorkExperience(
                         YearMonth.parse("09/1987", format),
-                        YearMonth.parse("07/1993", format));
-        eduList1.addItem(eduList1Line1);
-        eduList1.addItem(eduList1Line2);
-
+                        YearMonth.parse("07/1993", format),
+                        "Инженер (программист Fortran ...",
+                        null,
+                        "Санкт-Петербургский национальный ...",
+                        "https://itmo.ru/ru/");
         edu.addItem(eduLine1);
         edu.addItem(eduLine2);
         edu.addItem(eduLine3);
-        edu.addItem(eduList1);
+        edu.addItem(eduLine4);
+        edu.addItem(eduLine5);
 
         resume.addSection(EDUCATION, edu);
         /*----------------------------------------------------------------------------------------------------------*/
@@ -123,8 +132,8 @@ public class MainResumeTestData {
             System.out.println(key.getTitle() + ": " + contactsMap.get(key));
         }
 
-        Map<ResumeSectionType, AbstractTextSection> resumeMap = resume.getAllSections();
-        for (ResumeSectionType key : resumeMap.keySet()) {
+        Map<SectionType, AbstractSection> resumeMap = resume.getAllSections();
+        for (SectionType key : resumeMap.keySet()) {
             if (key != null) {
                 System.out.println(key.getTitle());
             }

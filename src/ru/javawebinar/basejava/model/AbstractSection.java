@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public abstract class AbstractTextSection {
+public abstract class AbstractSection {
     private String title;
 
     public String getTitle() {
@@ -18,7 +18,7 @@ public abstract class AbstractTextSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AbstractTextSection that = (AbstractTextSection) o;
+        AbstractSection that = (AbstractSection) o;
 
         return Objects.equals(title, that.title);
     }
