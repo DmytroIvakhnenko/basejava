@@ -5,12 +5,14 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 /**
  * Array based storage for Resumes
  */
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
+    static final Logger ARRAYLOG = Logger.getLogger(AbstractArrayStorage.class.getName());
     static final int MAX_STORAGE_SIZE = 10_000;
     final Resume[] storage = new Resume[MAX_STORAGE_SIZE];
     int size = 0;
@@ -34,6 +36,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     @Override
     protected void doSave(Resume resume, Integer index) {
         if (size >= MAX_STORAGE_SIZE) {
+            ARRAYLOG.warning("Storage overflow, size:" + size + " max size:" + MAX_STORAGE_SIZE);
             throw new StorageException(
                     "Storage overflow, size:" + size + " max size:" + MAX_STORAGE_SIZE, resume.getUuid());
         }
