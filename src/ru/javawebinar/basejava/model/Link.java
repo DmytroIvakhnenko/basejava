@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class WorkPlace {
+public class Link {
     private final String name;
     private final String homepage;
 
-    public WorkPlace(String name, String homepage) {
+    public Link(String name, String homepage) {
         Objects.requireNonNull(name);
         this.name = name;
         this.homepage = homepage;
@@ -25,10 +25,10 @@ public class WorkPlace {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        WorkPlace workPlace = (WorkPlace) o;
+        Link link = (Link) o;
 
-        if (!name.equals(workPlace.name)) return false;
-        return Objects.equals(homepage, workPlace.homepage);
+        if (!name.equals(link.name)) return false;
+        return Objects.equals(homepage, link.homepage);
     }
 
     @Override

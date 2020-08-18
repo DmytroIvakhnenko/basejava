@@ -29,6 +29,19 @@ public class Resume implements Comparable<Resume> {
         contacts = new EnumMap<>(ContactType.class);
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public AbstractSection getSection(SectionType type) {
+        Objects.requireNonNull(type);
+        return sections.get(type);
+    }
+
     public void addContact(ContactType type, String contact) {
         Objects.requireNonNull(type);
         Objects.requireNonNull(contact);
@@ -45,21 +58,8 @@ public class Resume implements Comparable<Resume> {
         sections.put(type, abstractSection);
     }
 
-    public AbstractSection getSection(SectionType type) {
-        Objects.requireNonNull(type);
-        return sections.get(type);
-    }
-
     public Map<SectionType, AbstractSection> getAllSections() {
         return sections;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     @Override

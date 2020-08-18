@@ -3,14 +3,14 @@ package ru.javawebinar.basejava.model;
 import java.time.YearMonth;
 import java.util.Objects;
 
-public class WorkExperience {
+public class Experience {
     private final YearMonth startDate;
     private final YearMonth endDate;
     private final String position;
     private final String description;
-    private final WorkPlace place;
+    private final Link place;
 
-    public WorkExperience(YearMonth startDate, YearMonth endDate, String position, String description, String name, String url) {
+    public Experience(YearMonth startDate, YearMonth endDate, String position, String description, String name, String url) {
         Objects.requireNonNull(startDate);
         Objects.requireNonNull(endDate);
         Objects.requireNonNull(position);
@@ -18,7 +18,7 @@ public class WorkExperience {
         this.endDate = endDate;
         this.position = position;
         this.description = description;
-        this.place = new WorkPlace(name, url);
+        this.place = new Link(name, url);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class WorkExperience {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        WorkExperience that = (WorkExperience) o;
+        Experience that = (Experience) o;
 
         if (!startDate.equals(that.startDate)) return false;
         if (!endDate.equals(that.endDate)) return false;

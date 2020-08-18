@@ -40,25 +40,25 @@ public class MainResumeTestData {
         qua.addItem(new SingleTextSection("Languages", "Java, Scala ..."));
         resume.addSection(QUALIFICATIONS, qua);
         /*----------------------------------------------------------------------------------------------------------*/
-        ListOfSections<WorkExperience> exp = new ListOfSections<>();
-        WorkExperience expLine1 =
-                new WorkExperience(
+        ListOfSections<Experience> exp = new ListOfSections<>();
+        Experience expLine1 =
+                new Experience(
                         YearMonth.parse("10/2013", format),
                         YearMonth.now(),
                         "Автор проекта.",
                         "Создание, организация ...",
                         "Java Online Projects.",
                         "https://javaops.ru/");
-        WorkExperience expLine2 =
-                new WorkExperience(
+        Experience expLine2 =
+                new Experience(
                         YearMonth.parse("10/2014", format),
                         YearMonth.parse("10/2016", format),
                         "Старший разработчик (backend).",
                         "Проектирование и разработка ...",
                         "Wrike.",
                         "https://www.wrike.com/");
-        WorkExperience expLine3 =
-                new WorkExperience(
+        Experience expLine3 =
+                new Experience(
                         YearMonth.parse("04/2012", format),
                         YearMonth.parse("10/2014", format),
                         "Java архитектор.",
@@ -70,25 +70,25 @@ public class MainResumeTestData {
         exp.addItem(expLine3);
         resume.addSection(EXPERIENCE, exp);
         /*----------------------------------------------------------------------------------------------------------*/
-        ListOfSections<WorkExperience> edu = new ListOfSections<>();
-        WorkExperience eduLine1 =
-                new WorkExperience(
+        ListOfSections<Experience> edu = new ListOfSections<>();
+        Experience eduLine1 =
+                new Experience(
                         YearMonth.parse("03/2013", format),
                         YearMonth.parse("05/2013", format),
                         "Functional Programming ...",
                         null,
                         "Coursera",
                         "https://www.coursera.org/learn/progfun1");
-        WorkExperience eduLine2 =
-                new WorkExperience(
+        Experience eduLine2 =
+                new Experience(
                         YearMonth.parse("03/2011", format),
                         YearMonth.parse("04/2011", format),
                         "Курс \"Объектно-ориентированный  ...",
                         null,
                         "Luxoft",
                         "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html");
-        WorkExperience eduLine3 =
-                new WorkExperience(
+        Experience eduLine3 =
+                new Experience(
                         YearMonth.parse("01/2005", format),
                         YearMonth.parse("04/2005", format),
                         "3 месяца обучения мобильным ...",
@@ -96,16 +96,16 @@ public class MainResumeTestData {
                         "Siemens AG",
                         "https://new.siemens.com/ru/ru.html"
                 );
-        WorkExperience eduLine4 =
-                new WorkExperience(
+        Experience eduLine4 =
+                new Experience(
                         YearMonth.parse("09/1993", format),
                         YearMonth.parse("07/1996", format),
                         "Аспирантура (программист С ...",
                         null,
                         "Санкт-Петербургский национальный ...",
                         "https://itmo.ru/ru/");
-        WorkExperience eduLine5 =
-                new WorkExperience(
+        Experience eduLine5 =
+                new Experience(
                         YearMonth.parse("09/1987", format),
                         YearMonth.parse("07/1993", format),
                         "Инженер (программист Fortran ...",
