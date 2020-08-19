@@ -10,6 +10,8 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.javawebinar.basejava.ResumeTestData.setResumeTestData;
+
 public abstract class AbstractStorageTest {
     protected final Storage storage;
 
@@ -18,10 +20,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    private static final Resume RESUME_1 = new Resume(UUID_1, "Testman1");
-    private static final Resume RESUME_2 = new Resume(UUID_2, "Testman2");
-    private static final Resume RESUME_3 = new Resume(UUID_3, "Testman3");
-    private static final Resume RESUME_4 = new Resume(UUID_4, "Testman4");
+    private static final Resume RESUME_1 = setResumeTestData(UUID_1, "Testman1");
+    private static final Resume RESUME_2 = setResumeTestData(UUID_2, "Testman2");
+    private static final Resume RESUME_3 = setResumeTestData(UUID_3, "Testman3");
+    private static final Resume RESUME_4 = setResumeTestData(UUID_4, "Testman4");
 
     private static final List<Resume> FULL_LIST_OF_RESUMES = Arrays.asList(RESUME_1, RESUME_2, RESUME_3, RESUME_4);
 
@@ -68,7 +70,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateTest() {
-        Resume newResume = new Resume(UUID_1, "New Testman");
+        Resume newResume = setResumeTestData(UUID_1, "New Testman");
         storage.update(newResume);
         Assert.assertEquals(newResume, storage.get(UUID_1));
     }

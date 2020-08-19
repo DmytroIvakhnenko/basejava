@@ -37,9 +37,22 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
+    public String getContact(ContactType type) {
+        Objects.requireNonNull(type);
+        return contacts.get(type);
+    }
+
+    public Map<ContactType, String> getAllContacts() {
+        return contacts;
+    }
+
     public AbstractSection getSection(SectionType type) {
         Objects.requireNonNull(type);
         return sections.get(type);
+    }
+
+    public Map<SectionType, AbstractSection> getAllSections() {
+        return sections;
     }
 
     public void addContact(ContactType type, String contact) {
@@ -48,18 +61,10 @@ public class Resume implements Comparable<Resume> {
         contacts.put(type, contact);
     }
 
-    public Map<ContactType, String> getAllContacts() {
-        return contacts;
-    }
-
     public void addSection(SectionType type, AbstractSection abstractSection) {
         Objects.requireNonNull(type);
         Objects.requireNonNull(abstractSection);
         sections.put(type, abstractSection);
-    }
-
-    public Map<SectionType, AbstractSection> getAllSections() {
-        return sections;
     }
 
     @Override

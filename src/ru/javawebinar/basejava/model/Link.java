@@ -40,6 +40,6 @@ public class Link {
 
     @Override
     public String toString() {
-        return name + (homepage != null ? homepage : "");
+        return name + " " + (homepage != null ? homepage : "");
     }
 }
