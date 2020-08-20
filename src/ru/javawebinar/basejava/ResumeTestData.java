@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.model.*;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Map;
 
 import static ru.javawebinar.basejava.model.ContactType.*;
@@ -42,32 +41,17 @@ public class ResumeTestData {
         resume.addSection(QUALIFICATIONS, qua);
         /*----------------------------------------------------------------------------------------------------------*/
         ListOfSections<Experience> exp = new ListOfSections<>();
-        Experience expLine1 = new Experience(Arrays.asList(new Position(YearMonth.parse("10/2013", format), YearMonth.now(), "Автор проекта.", "Создание, организация ...")),
-                new Link("Java Online Projects.", "https://javaops.ru/"));
-        Experience expLine2 = new Experience(Arrays.asList(new Position(YearMonth.parse("10/2014", format), YearMonth.parse("10/2016", format), "Старший разработчик (backend).", "Проектирование и разработка ...")),
-                new Link("Wrike.", "https://www.wrike.com/"));
-        Experience expLine3 = new Experience(Arrays.asList(new Position(YearMonth.parse("04/2012", format), YearMonth.parse("10/2014", format), "Java архитектор.", "Организация процесса разработки ...")),
-                new Link("RIT Center.", null));
-        exp.addItem(expLine1);
-        exp.addItem(expLine2);
-        exp.addItem(expLine3);
+        exp.addItem(new Experience("Java Online Projects.", "https://javaops.ru/", new Experience.Position(YearMonth.parse("10/2013", format), YearMonth.now(), "Автор проекта.", "Создание, организация ...")));
+        exp.addItem(new Experience("Wrike.", "https://www.wrike.com/", new Experience.Position(YearMonth.parse("10/2014", format), YearMonth.parse("10/2016", format), "Старший разработчик (backend).", "Проектирование и разработка ...")));
+        exp.addItem(new Experience("RIT Center.", null, new Experience.Position(YearMonth.parse("04/2012", format), YearMonth.parse("10/2014", format), "Java архитектор.", "Организация процесса разработки ...")));
         resume.addSection(EXPERIENCE, exp);
         /*----------------------------------------------------------------------------------------------------------*/
         ListOfSections<Experience> edu = new ListOfSections<>();
-        Experience eduLine1 = new Experience(Arrays.asList(new Position(YearMonth.parse("03/2013", format), YearMonth.parse("05/2013", format), "Functional Programming ...", null)),
-                new Link("Coursera", "https://www.coursera.org/learn/progfun1"));
-        Experience eduLine2 = new Experience(Arrays.asList(new Position(YearMonth.parse("03/2011", format), YearMonth.parse("04/2011", format), "Курс \"Объектно-ориентированный  ...", null)),
-                new Link("Luxoft", "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html"));
-        Experience eduLine3 = new Experience(Arrays.asList(new Position(YearMonth.parse("01/2005", format), YearMonth.parse("04/2005", format), "3 месяца обучения мобильным ...", null)),
-                new Link("Siemens AG", "https://new.siemens.com/ru/ru.html"));
-        Experience eduLine4 = new Experience(Arrays.asList(new Position(YearMonth.parse("09/1993", format), YearMonth.parse("07/1996", format), "Аспирантура (программист С ...", null),
-                new Position(YearMonth.parse("09/1987", format), YearMonth.parse("07/1993", format), "Инженер (программист Fortran ...", null)),
-                new Link("Санкт-Петербургский национальный ...", "https://itmo.ru/ru/"));
-        edu.addItem(eduLine1);
-        edu.addItem(eduLine2);
-        edu.addItem(eduLine3);
-        edu.addItem(eduLine4);
-
+        edu.addItem(new Experience("Coursera", "https://www.coursera.org/learn/progfun1", new Experience.Position(YearMonth.parse("03/2013", format), YearMonth.parse("05/2013", format), "Functional Programming ...", null)));
+        edu.addItem(new Experience("Luxoft", "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html", new Experience.Position(YearMonth.parse("03/2011", format), YearMonth.parse("04/2011", format), "Курс \"Объектно-ориентированный  ...", null)));
+        edu.addItem(new Experience("Siemens AG", "https://new.siemens.com/ru/ru.html", new Experience.Position(YearMonth.parse("01/2005", format), YearMonth.parse("04/2005", format), "3 месяца обучения мобильным ...", null)));
+        edu.addItem(new Experience("Санкт-Петербургский национальный ...", "https://itmo.ru/ru/", new Experience.Position(YearMonth.parse("09/1993", format), YearMonth.parse("07/1996", format), "Аспирантура (программист С ...", null),
+                new Experience.Position(YearMonth.parse("09/1987", format), YearMonth.parse("07/1993", format), "Инженер (программист Fortran ...", null)));
         resume.addSection(EDUCATION, edu);
         /*----------------------------------------------------------------------------------------------------------*/
         return resume;

@@ -1,11 +1,23 @@
 package ru.javawebinar.basejava.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ListOfSections<T> extends AbstractSection {
     private final List<T> list;
+
+    @SafeVarargs
+    public ListOfSections(String title, T... items) {
+        this(title, Arrays.asList(items));
+    }
+
+    public ListOfSections(String title, List<T> list) {
+        Objects.requireNonNull(list, "List can't be null");
+        this.list = list;
+        super.setTitle(title);
+    }
 
     public ListOfSections() {
         list = new ArrayList<>();
