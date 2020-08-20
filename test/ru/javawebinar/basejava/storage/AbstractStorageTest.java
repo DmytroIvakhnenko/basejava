@@ -13,7 +13,7 @@ import java.util.List;
 import static ru.javawebinar.basejava.ResumeTestData.setResumeTestData;
 
 public abstract class AbstractStorageTest {
-    protected final Storage storage;
+    final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -24,8 +24,6 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_2 = setResumeTestData(UUID_2, "Testman2");
     private static final Resume RESUME_3 = setResumeTestData(UUID_3, "Testman3");
     private static final Resume RESUME_4 = setResumeTestData(UUID_4, "Testman4");
-
-    private static final List<Resume> FULL_LIST_OF_RESUMES = Arrays.asList(RESUME_1, RESUME_2, RESUME_3, RESUME_4);
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -58,9 +56,10 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void saveTest() {
+        final List<Resume> fullListOfResumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3, RESUME_4);
         storage.save(RESUME_4);
         Assert.assertEquals(4, storage.size());
-        Assert.assertEquals(FULL_LIST_OF_RESUMES, storage.getAllSorted());
+        Assert.assertEquals(fullListOfResumes, storage.getAllSorted());
     }
 
     @Test(expected = ExistStorageException.class)
