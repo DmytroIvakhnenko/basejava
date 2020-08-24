@@ -26,14 +26,17 @@ public class FileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
+    @Override
     public boolean isElementFound(File file) {
         return file.exists();
     }
 
+    @Override
     public File getElementPointer(String uuid) {
         return new File(directory, uuid);
     }
 
+    @Override
     public Resume doGet(File file) {
         try {
             return streamStorage.doRead(new BufferedInputStream(new FileInputStream(file)));
@@ -42,6 +45,7 @@ public class FileStorage extends AbstractStorage<File> {
         }
     }
 
+    @Override
     public Stream<Resume> doGetAll() {
         File[] list = directory.listFiles();
         List<Resume> returnList = new LinkedList<>();
@@ -53,6 +57,7 @@ public class FileStorage extends AbstractStorage<File> {
         return returnList.stream();
     }
 
+    @Override
     public void doSave(Resume resume, File file) {
         try {
             if (!file.createNewFile()) {
@@ -64,6 +69,7 @@ public class FileStorage extends AbstractStorage<File> {
         doUpdate(resume, file);
     }
 
+    @Override
     public void doUpdate(Resume resume, File file) {
         try {
             streamStorage.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
@@ -72,12 +78,14 @@ public class FileStorage extends AbstractStorage<File> {
         }
     }
 
+    @Override
     public void doDelete(File file) {
         if (!file.delete()) {
             throw new StorageException("File deletion error", file.getName());
         }
     }
 
+    @Override
     public void clear() {
         File[] list = directory.listFiles();
         if (list != null) {
@@ -87,6 +95,7 @@ public class FileStorage extends AbstractStorage<File> {
         }
     }
 
+    @Override
     public int size() {
         File[] list = directory.listFiles();
         if (list == null) {
@@ -94,8 +103,4 @@ public class FileStorage extends AbstractStorage<File> {
         }
         return list.length;
     }
-
-  /*  protected abstract Resume doRead(InputStream in) throws IOException;
-
-    protected abstract void doWrite(Resume resume, OutputStream out) throws IOException;*/
 }
