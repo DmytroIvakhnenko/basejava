@@ -1,11 +1,14 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Experience {
+public class Experience implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final List<Position> positions;
     private final Link place;
 
@@ -43,7 +46,9 @@ public class Experience {
         return positions.toString() + place.toString();
     }
 
-    public static class Position {
+    public static class Position implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private final YearMonth startDate;
         private final YearMonth endDate;
         private final String position;

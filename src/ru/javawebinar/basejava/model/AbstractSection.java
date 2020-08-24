@@ -1,8 +1,11 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class AbstractSection {
+public abstract class AbstractSection implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String title;
 
     public String getTitle() {

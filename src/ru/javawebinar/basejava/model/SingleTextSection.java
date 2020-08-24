@@ -1,6 +1,8 @@
 package ru.javawebinar.basejava.model;
 
 public class SingleTextSection extends AbstractSection {
+    private static final long serialVersionUID = 1L;
+
     private final String text;
 
     public SingleTextSection(String title, String text) {

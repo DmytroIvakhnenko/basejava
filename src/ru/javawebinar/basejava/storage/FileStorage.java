@@ -3,18 +3,20 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
+    private final StreamStorage streamStorage;
 
-    public AbstractFileStorage(File directory) {
+    public FileStorage(File directory, StreamStorage streamStorage) {
         Objects.requireNonNull(directory, "Directory can't be null");
+        Objects.requireNonNull(streamStorage, "Storage can't be null");
+        this.streamStorage = streamStorage;
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -24,27 +26,23 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    @Override
-    protected boolean isElementFound(File file) {
+    public boolean isElementFound(File file) {
         return file.exists();
     }
 
-    @Override
-    protected File getElementPointer(String uuid) {
+    public File getElementPointer(String uuid) {
         return new File(directory, uuid);
     }
 
-    @Override
-    protected Resume doGet(File file) {
+    public Resume doGet(File file) {
         try {
-            return doRead(file);
+            return streamStorage.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
     }
 
-    @Override
-    protected Stream<Resume> doGetAll() {
+    public Stream<Resume> doGetAll() {
         File[] list = directory.listFiles();
         List<Resume> returnList = new LinkedList<>();
         if (list != null) {
@@ -55,8 +53,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         return returnList.stream();
     }
 
-    @Override
-    protected void doSave(Resume resume, File file) {
+    public void doSave(Resume resume, File file) {
         try {
             if (!file.createNewFile()) {
                 throw new StorageException("File already exists", file.getName());
@@ -67,23 +64,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         doUpdate(resume, file);
     }
 
-    @Override
-    protected void doUpdate(Resume resume, File file) {
+    public void doUpdate(Resume resume, File file) {
         try {
-            doWrite(resume, file);
+            streamStorage.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
     }
 
-    @Override
-    protected void doDelete(File file) {
+    public void doDelete(File file) {
         if (!file.delete()) {
             throw new StorageException("File deletion error", file.getName());
         }
     }
 
-    @Override
     public void clear() {
         File[] list = directory.listFiles();
         if (list != null) {
@@ -93,7 +87,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
-    @Override
     public int size() {
         File[] list = directory.listFiles();
         if (list == null) {
@@ -102,7 +95,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         return list.length;
     }
 
-    protected abstract Resume doRead(File file) throws IOException;
+  /*  protected abstract Resume doRead(InputStream in) throws IOException;
 
-    protected abstract void doWrite(Resume resume, File file) throws IOException;
+    protected abstract void doWrite(Resume resume, OutputStream out) throws IOException;*/
 }
