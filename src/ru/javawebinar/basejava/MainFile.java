@@ -5,14 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MainFile {
-    public static void showFiles(File startDir, String path) {
+    public static void showFiles(File startDir, String indent) {
         File[] list = startDir.listFiles();
         if (list != null && startDir.isDirectory()) {
-            for (File f : list) {
-                if (f.isDirectory()) {
-                    showFiles(f, path + "/" + f.getName());
+            for (File file : list) {
+                if (file.isDirectory()) {
+                    System.out.println(indent + file.getName() + "/");
+                    showFiles(file, indent + "  ");
                 } else {
-                    System.out.println(path + ": " + f.getName());
+                    System.out.println(indent + file.getName());
                 }
             }
         }
@@ -46,7 +47,7 @@ public class MainFile {
         //--------------------------------------------------------------------------
         System.out.println("--------------------------------------------------------------------------");
         File root = new File(".");
-        showFiles(root, root.getName());
+        showFiles(root, "");
 
     }
 }

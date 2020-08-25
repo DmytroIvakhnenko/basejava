@@ -84,8 +84,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] list = getFilesList();
-        for (File f : list) {
+        for (File f : getFilesList()) {
             doDelete(f);
         }
     }
