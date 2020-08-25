@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.serialization.SerializationStrategy;
 
 import java.io.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,9 +47,8 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public List<Resume> doGetAll() {
-        File[] list = getFilesList();
-        List<Resume> returnList = new LinkedList<>();
-        for (File f : list) {
+        List<Resume> returnList = new ArrayList<>();
+        for (File f : getFilesList()) {
             returnList.add(doGet(f));
         }
         return returnList;
