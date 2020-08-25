@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class ListStorage extends AbstractStorage<Integer> {
     private final List<Resume> storage = new ArrayList<>();
@@ -50,8 +49,8 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Stream<Resume> doGetAll() {
-        return storage.stream();
+    protected List<Resume> doGetAll() {
+        return new ArrayList<>(storage);
     }
 
     @Override

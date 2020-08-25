@@ -2,21 +2,21 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.serialization.SerializationStrategy;
 
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
-    private final StreamStorage streamStorage;
+    private final SerializationStrategy serializationStrategy;
 
-    public FileStorage(File directory, StreamStorage streamStorage) {
+    public FileStorage(File directory, SerializationStrategy serializationStrategy) {
         Objects.requireNonNull(directory, "Directory can't be null");
-        Objects.requireNonNull(streamStorage, "Storage can't be null");
-        this.streamStorage = streamStorage;
+        Objects.requireNonNull(serializationStrategy, "Storage can't be null");
+        this.serializationStrategy = serializationStrategy;
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -39,22 +39,20 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public Resume doGet(File file) {
         try {
-            return streamStorage.doRead(new BufferedInputStream(new FileInputStream(file)));
+            return serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
     }
 
     @Override
-    public Stream<Resume> doGetAll() {
-        File[] list = directory.listFiles();
+    public List<Resume> doGetAll() {
+        File[] list = getFilesList();
         List<Resume> returnList = new LinkedList<>();
-        if (list != null) {
-            for (File f : list) {
-                returnList.add(doGet(f));
-            }
+        for (File f : list) {
+            returnList.add(doGet(f));
         }
-        return returnList.stream();
+        return returnList;
     }
 
     @Override
@@ -72,7 +70,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public void doUpdate(Resume resume, File file) {
         try {
-            streamStorage.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            serializationStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -87,20 +85,22 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] list = directory.listFiles();
-        if (list != null) {
-            for (File f : list) {
-                doDelete(f);
-            }
+        File[] list = getFilesList();
+        for (File f : list) {
+            doDelete(f);
         }
     }
 
     @Override
     public int size() {
+        return getFilesList().length;
+    }
+
+    private File[] getFilesList() {
         File[] list = directory.listFiles();
         if (list == null) {
             throw new StorageException("Is not a directory no more", directory.getName());
         }
-        return list.length;
+        return list;
     }
 }

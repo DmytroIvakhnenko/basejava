@@ -7,7 +7,6 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class AbstractStorage<SK> implements Storage {
     private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
@@ -43,7 +42,7 @@ public abstract class AbstractStorage<SK> implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         LOG.info("GetAllSorted");
-        return doGetAll().sorted().collect(Collectors.toList());
+        return doGetAll().stream().sorted().collect(Collectors.toList());
     }
 
     protected abstract boolean isElementFound(SK elementPointer);
@@ -52,7 +51,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract Resume doGet(SK elementPointer);
 
-    protected abstract Stream<Resume> doGetAll();
+    protected abstract List<Resume> doGetAll();
 
     protected abstract void doSave(Resume resume, SK elementPointer);
 

@@ -4,9 +4,8 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 /**
  * Array based storage for Resumes
@@ -57,8 +56,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Stream<Resume> doGetAll() {
-        return Arrays.stream(storage).filter(Objects::nonNull);
+    protected List<Resume> doGetAll() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
     @Override

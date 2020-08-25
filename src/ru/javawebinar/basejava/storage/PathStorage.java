@@ -2,22 +2,27 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.serialization.SerializationStrategy;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private final StreamStorage streamStorage;
+    private final SerializationStrategy serializationStrategy;
 
-    public PathStorage(String dir, StreamStorage streamStorage) {
+    public PathStorage(String dir, SerializationStrategy serializationStrategy) {
         Objects.requireNonNull(dir, "Directory can't be null");
-        Objects.requireNonNull(streamStorage, "Storage can't be null");
-        this.streamStorage = streamStorage;
+        Objects.requireNonNull(serializationStrategy, "Storage can't be null");
+        this.serializationStrategy = serializationStrategy;
         directory = Paths.get(dir);
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory ot is not writable");
@@ -31,25 +36,21 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public Path getElementPointer(String uuid) {
-        return Paths.get(directory.toString(), uuid);
+        return directory.resolve(uuid);
     }
 
     @Override
     public Resume doGet(Path file) {
         try {
-            return streamStorage.doRead(new BufferedInputStream(new FileInputStream(file.toString())));
+            return serializationStrategy.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.toString(), e);
         }
     }
 
     @Override
-    public Stream<Resume> doGetAll() {
-        try {
-            return Files.walk(directory).filter(Files::isRegularFile).map(this::doGet);
-        } catch (IOException e) {
-            throw new StorageException("IO error", null, e);
-        }
+    public List<Resume> doGetAll() {
+        return getFilesList().map(this::doGet).collect(Collectors.toList());
     }
 
     @Override
@@ -65,7 +66,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     public void doUpdate(Resume resume, Path file) {
         try {
-            streamStorage.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file.toString())));
+            serializationStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.toString(), e);
         }
@@ -82,17 +83,17 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Path deletion error", null);
-        }
+        getFilesList().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
+        return Math.toIntExact(getFilesList().count());
+    }
+
+    private Stream<Path> getFilesList() {
         try {
-            return Math.toIntExact(Files.list(directory).count());
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Files search error", null, e);
         }
