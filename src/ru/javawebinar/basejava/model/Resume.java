@@ -20,8 +20,8 @@ public class Resume implements Comparable<Resume>, Serializable {
     private String uuid; // Unique identifier
     private String fullName;
 
-    private Map<SectionType, AbstractSection> sections;
-    private Map<ContactType, String> contacts;
+    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
     public Resume() {
     }
@@ -35,8 +35,6 @@ public class Resume implements Comparable<Resume>, Serializable {
         Objects.requireNonNull(fullName, "Fullname can't be null");
         this.uuid = uuid;
         this.fullName = fullName;
-        sections = new EnumMap<>(SectionType.class);
-        contacts = new EnumMap<>(ContactType.class);
     }
 
     public String getUuid() {
@@ -47,21 +45,11 @@ public class Resume implements Comparable<Resume>, Serializable {
         return fullName;
     }
 
-    public String getContact(ContactType type) {
-        Objects.requireNonNull(type);
-        return contacts.get(type);
-    }
-
-    public Map<ContactType, String> getAllContacts() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
-    public AbstractSection getSection(SectionType type) {
-        Objects.requireNonNull(type);
-        return sections.get(type);
-    }
-
-    public Map<SectionType, AbstractSection> getAllSections() {
+    public Map<SectionType, AbstractSection> getSections() {
         return sections;
     }
 
@@ -94,8 +82,8 @@ public class Resume implements Comparable<Resume>, Serializable {
     public int hashCode() {
         int result = uuid.hashCode();
         result = 31 * result + fullName.hashCode();
-        result = 31 * result + (sections != null ? sections.hashCode() : 0);
-        result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
+        result = 31 * result + sections.hashCode();
+        result = 31 * result + contacts.hashCode();
         return result;
     }
 

@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class Experience implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<Position> positions;
+    private List<Position> positions = new ArrayList<>();
     private Link place;
 
     public Experience() {
