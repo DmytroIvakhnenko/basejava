@@ -33,6 +33,14 @@ public class Experience implements Serializable {
         this.place = place;
     }
 
+    public Link getPlace() {
+        return place;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -78,6 +86,22 @@ public class Experience implements Serializable {
             this.endDate = endDate;
             this.position = position;
             this.description = description;
+        }
+
+        public YearMonth getStartDate() {
+            return startDate;
+        }
+
+        public YearMonth getEndDate() {
+            return endDate;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+
+        public String getDescription() {
+            return description;
         }
 
         @Override
