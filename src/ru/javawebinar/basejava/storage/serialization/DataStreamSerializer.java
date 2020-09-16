@@ -35,7 +35,7 @@ public class DataStreamSerializer implements SerializationStrategy {
         writeString(d, e.getValue());
     }
 
-    private void writeSections(final DataOutputStream dos, final Map.Entry<SectionType, AbstractSection> e) {
+    private void writeSections(final DataOutputStream dos, final Map.Entry<SectionType, AbstractSection> e) throws IOException {
         writeString(dos, e.getKey().name());
         switch (e.getKey()) {
             case PERSONAL:
@@ -55,12 +55,18 @@ public class DataStreamSerializer implements SerializationStrategy {
         }
     }
 
-    private <T> void writeList(final DataOutputStream dos, final Collection<T> l, BiConsumer<DataOutputStream, T> sup) {
-        writeInt(dos, l.size());
-        l.forEach((e) -> sup.accept(dos, e));
+    private interface BiConsumerWithException<T, U> {
+        void accept(T t, U u) throws IOException;
     }
 
-    private void writeExperience(final DataOutputStream dos, final Experience e) {
+    private <T> void writeList(final DataOutputStream dos, final Collection<T> l, BiConsumerWithException<DataOutputStream, T> sup) throws IOException {
+        writeInt(dos, l.size());
+        for (T elem : l) {
+            sup.accept(dos, elem);
+        }
+    }
+
+    private void writeExperience(final DataOutputStream dos, final Experience e) throws IOException {
         writeString(dos, e.getPlace().getName());
         writeString(dos, Optional.ofNullable(e.getPlace().getHomepage()).orElse(NULL));
         writeList(dos, e.getPositions(), this::writePosition);
