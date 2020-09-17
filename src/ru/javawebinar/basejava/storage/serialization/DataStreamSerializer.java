@@ -1,20 +1,11 @@
 package ru.javawebinar.basejava.storage.serialization;
 
-import ru.javawebinar.basejava.exception.ResumeDeserializationException;
-import ru.javawebinar.basejava.exception.ResumeSerializationException;
 import ru.javawebinar.basejava.model.*;
 
 import java.io.*;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
 
 public class DataStreamSerializer implements SerializationStrategy {
     final static String NULL = "null";
@@ -30,7 +21,7 @@ public class DataStreamSerializer implements SerializationStrategy {
         }
     }
 
-    private void writeContacts(DataOutputStream d, Map.Entry<ContactType, String> e) {
+    private void writeContacts(final DataOutputStream d, final Map.Entry<ContactType, String> e) throws IOException {
         writeString(d, e.getKey().name());
         writeString(d, e.getValue());
     }
@@ -72,27 +63,19 @@ public class DataStreamSerializer implements SerializationStrategy {
         writeList(dos, e.getPositions(), this::writePosition);
     }
 
-    private void writePosition(DataOutputStream dos, final Experience.Position p) {
+    private void writePosition(final DataOutputStream dos, final Experience.Position p) throws IOException {
         writeString(dos, p.getPosition());
         writeString(dos, Optional.ofNullable(p.getDescription()).orElse(NULL));
         writeString(dos, p.getStartDate().format(MONTH_YEAR_FORMATTER));
         writeString(dos, p.getEndDate().format(MONTH_YEAR_FORMATTER));
     }
 
-    private void writeString(final DataOutputStream dos, final String s) {
-        try {
-            dos.writeUTF(s);
-        } catch (IOException e) {
-            throw new ResumeSerializationException("Error writing string: " + s, e);
-        }
+    private void writeString(final DataOutputStream dos, final String s) throws IOException {
+        dos.writeUTF(s);
     }
 
-    private void writeInt(final DataOutputStream dos, final int i) {
-        try {
-            dos.writeInt(i);
-        } catch (IOException e) {
-            throw new ResumeSerializationException("Error writing int: " + i, e);
-        }
+    private void writeInt(final DataOutputStream dos, final int i) throws IOException {
+        dos.writeInt(i);
     }
 
     @Override
@@ -107,7 +90,7 @@ public class DataStreamSerializer implements SerializationStrategy {
         }
     }
 
-    private void readSections(DataInputStream dis, Resume resume) {
+    private void readSections(DataInputStream dis, Resume resume) throws IOException {
         SectionType st = SectionType.valueOf(readString(dis));
         switch (st) {
             case PERSONAL:
@@ -125,18 +108,18 @@ public class DataStreamSerializer implements SerializationStrategy {
         }
     }
 
-    private void readContacts(DataInputStream dis, Resume resume) {
+    private void readContacts(DataInputStream dis, Resume resume) throws IOException {
         resume.addContact(ContactType.valueOf(readString(dis)), readString(dis));
     }
 
-    private void readResumeBlock(DataInputStream dis, Resume resume, BiConsumer<DataInputStream, Resume> consumer) {
+    private void readResumeBlock(DataInputStream dis, Resume resume, BiConsumerWithException<DataInputStream, Resume> consumer) throws IOException {
         int size = readInt(dis);
         for (int i = 0; i < size; i++) {
             consumer.accept(dis, resume);
         }
     }
 
-    private Experience readExperience(DataInputStream dis) {
+    private Experience readExperience(DataInputStream dis) throws IOException {
         String name = readString(dis);
         String homepage = readNullString(dis);
         Link l = new Link(name, homepage);
@@ -144,7 +127,7 @@ public class DataStreamSerializer implements SerializationStrategy {
         return new Experience(lp, l);
     }
 
-    private Experience.Position readPosition(DataInputStream dis) {
+    private Experience.Position readPosition(DataInputStream dis) throws IOException {
         String position = readString(dis);
         String description = readNullString(dis);
         String startDate = readString(dis);
@@ -152,29 +135,29 @@ public class DataStreamSerializer implements SerializationStrategy {
         return new Experience.Position(YearMonth.parse(startDate, MONTH_YEAR_FORMATTER), YearMonth.parse(endDate, MONTH_YEAR_FORMATTER), position, description);
     }
 
-    private <T> List<T> readList(DataInputStream dis, Function<DataInputStream, T> function) {
+    public interface FunctionWithException<T, R> {
+        R apply(T t) throws IOException;
+    }
+
+    private <T> List<T> readList(DataInputStream dis, FunctionWithException<DataInputStream, T> function) throws IOException {
         int listSize = readInt(dis);
-        return Stream.generate(() -> function.apply(dis)).limit(listSize).collect(Collectors.toList());
-    }
-
-    private String readString(final DataInputStream dis) {
-        try {
-            return dis.readUTF();
-        } catch (IOException e) {
-            throw new ResumeDeserializationException("Error reading string value", e);
+        List<T> ls = new ArrayList<>();
+        for (int i = 0; i < listSize; i++) {
+            ls.add(function.apply(dis));
         }
+        return ls;
     }
 
-    private String readNullString(DataInputStream dis) {
+    private String readString(final DataInputStream dis) throws IOException {
+        return dis.readUTF();
+    }
+
+    private String readNullString(DataInputStream dis) throws IOException {
         String s = readString(dis);
         return NULL.equals(s) ? null : s;
     }
 
-    private int readInt(final DataInputStream dis) {
-        try {
-            return dis.readInt();
-        } catch (IOException e) {
-            throw new ResumeDeserializationException("Error reading int value", e);
-        }
+    private int readInt(final DataInputStream dis) throws IOException {
+        return dis.readInt();
     }
 }
