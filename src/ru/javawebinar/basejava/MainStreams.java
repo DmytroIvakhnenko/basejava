@@ -14,11 +14,18 @@ public class MainStreams {
     }
 
     static int minValue(int[] values) {
-        return IntStream.of(values).distinct().sorted().reduce(0, (acc, x) -> acc * 10 + x);
+        return IntStream.of(values)
+                .distinct()
+                .sorted()
+                .reduce(0, (acc, x) -> acc * 10 + x);
     }
 
     static List<Integer> oddOrEvenByStreams(List<Integer> integers) {
-        return integers.stream().collect(partitioningBy(MainStreams::isEven)).get(!isEven((integers.stream().mapToInt(Integer::intValue).sum())));
+        return integers.stream()
+                .collect(partitioningBy(MainStreams::isEven))
+                .get(!isEven((integers.stream()
+                        .mapToInt(Integer::intValue)
+                        .sum())));
     }
 
     static List<Integer> oddOrEven(List<Integer> integers) {
