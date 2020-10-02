@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NonExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
@@ -11,10 +12,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.javawebinar.basejava.ResumeTestData.setResumeTestData;
+import static ru.javawebinar.basejava.ResumeTestData.setResumeTestDataWithNoSectionsAndContacts;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("./storage");
+    protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
 
     final Storage storage;
 
@@ -23,10 +24,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    private static final Resume RESUME_1 = setResumeTestData(UUID_1, "Testman1");
-    private static final Resume RESUME_2 = setResumeTestData(UUID_2, "Testman2");
-    private static final Resume RESUME_3 = setResumeTestData(UUID_3, "Testman3");
-    private static final Resume RESUME_4 = setResumeTestData(UUID_4, "Testman4");
+    private static final Resume RESUME_1 = setResumeTestDataWithNoSectionsAndContacts(UUID_1, "Testman1");
+    private static final Resume RESUME_2 = setResumeTestDataWithNoSectionsAndContacts(UUID_2, "Testman2");
+    private static final Resume RESUME_3 = setResumeTestDataWithNoSectionsAndContacts(UUID_3, "Testman3");
+    private static final Resume RESUME_4 = setResumeTestDataWithNoSectionsAndContacts(UUID_4, "Testman4");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -72,7 +73,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateTest() {
-        Resume newResume = setResumeTestData(UUID_1, "New Testman");
+        Resume newResume = setResumeTestDataWithNoSectionsAndContacts(UUID_1, "New Testman");
         storage.update(newResume);
         Assert.assertEquals(newResume, storage.get(UUID_1));
     }

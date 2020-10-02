@@ -50,6 +50,10 @@ public class ResumeTestData {
         return resume;
     }
 
+    public static Resume setResumeTestDataWithNoSectionsAndContacts(String uuid, String fullName) {
+        return new Resume(uuid, fullName);
+    }
+
     public static void main(String[] args) {
         // print to console
         Resume resume = setResumeTestData("testUuid", "Григорий Кислин");
