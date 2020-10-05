@@ -1,17 +1,14 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NonExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.postgresql.util.PSQLState.UNIQUE_VIOLATION;
+import java.util.stream.Collectors;
 
 public class SqlStorage implements Storage {
 
@@ -46,15 +43,7 @@ public class SqlStorage implements Storage {
         sqlHelper.executeRequest("INSERT INTO resume (uuid, full_name) VALUES (?,?)", (ps) -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
-            try {
-                ps.execute();
-            } catch (SQLException e) {
-                if (e.getSQLState().equals(UNIQUE_VIOLATION.getState())) {
-                    throw new ExistStorageException(r.getUuid());
-                } else {
-                    throw e;
-                }
-            }
+            ps.execute();
             return null;
         });
     }
@@ -84,14 +73,14 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.executeRequest("SELECT * FROM resume r ORDER BY uuid", (ps) -> {
+        return sqlHelper.executeRequest("SELECT * FROM resume r", (ps) -> {
             ResultSet rs = ps.executeQuery();
             List<Resume> resumes = new ArrayList<>();
             while (rs.next()) {
-                resumes.add(new Resume(rs.getString("uuid").trim(), rs.getString("full_name")));
+                resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
             }
             return resumes;
-        });
+        }).stream().sorted().collect(Collectors.toList());
     }
 
     @Override
