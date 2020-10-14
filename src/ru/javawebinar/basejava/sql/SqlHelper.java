@@ -1,13 +1,10 @@
 package ru.javawebinar.basejava.sql;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import static org.postgresql.util.PSQLState.UNIQUE_VIOLATION;
 
 public class SqlHelper {
     private final ConnectionFactory connectionFactory;
@@ -21,13 +18,23 @@ public class SqlHelper {
              PreparedStatement ps = conn.prepareStatement(query)) {
             return sqlExecutor.execute(ps);
         } catch (SQLException e) {
-            if (e.getSQLState().equals(UNIQUE_VIOLATION.getState())) {
-                throw new ExistStorageException();
-            } else {
-                throw new StorageException(e);
-            }
+            throw SqlExceptionUtil.convertException(e);
+        }
+    }
 
+    public <T> T transactionalExecute(SqlTransaction<T> sqlTransaction) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = sqlTransaction.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw SqlExceptionUtil.convertException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
         }
     }
 }
-

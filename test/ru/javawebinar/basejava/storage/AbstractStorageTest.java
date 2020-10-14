@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static ru.javawebinar.basejava.ResumeTestData.setResumeTestDataWithNoSectionsAndContacts;
+import static ru.javawebinar.basejava.ResumeTestData.setResumeTestDataWithNoSections;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
@@ -25,10 +25,10 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = UUID.randomUUID().toString();
     private static final String UUID_4 = UUID.randomUUID().toString();
 
-    private static final Resume RESUME_1 = setResumeTestDataWithNoSectionsAndContacts(UUID_1, "Testman1");
-    private static final Resume RESUME_2 = setResumeTestDataWithNoSectionsAndContacts(UUID_2, "Testman2");
-    private static final Resume RESUME_3 = setResumeTestDataWithNoSectionsAndContacts(UUID_3, "Testman3");
-    private static final Resume RESUME_4 = setResumeTestDataWithNoSectionsAndContacts(UUID_4, "Testman4");
+    private static final Resume RESUME_1 = setResumeTestDataWithNoSections(UUID_1, "Testman1");
+    private static final Resume RESUME_2 = setResumeTestDataWithNoSections(UUID_2, "Testman2");
+    private static final Resume RESUME_3 = setResumeTestDataWithNoSections(UUID_3, "Testman3");
+    private static final Resume RESUME_4 = setResumeTestDataWithNoSections(UUID_4, "Testman4");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -74,7 +74,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateTest() {
-        Resume newResume = setResumeTestDataWithNoSectionsAndContacts(UUID_1, "New Testman");
+        Resume newResume = setResumeTestDataWithNoSections(UUID_1, "New Testman");
         storage.update(newResume);
         Assert.assertEquals(newResume, storage.get(UUID_1));
     }

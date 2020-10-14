@@ -54,6 +54,15 @@ public class ResumeTestData {
         return new Resume(uuid, fullName);
     }
 
+    public static Resume setResumeTestDataWithNoSections(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        resume.addContact(TELEPHONE, "+7(921) 855-0482");
+        resume.addContact(SKYPE, "grigory.kislin");
+        resume.addContact(EMAIL, "gkislin@yandex.ru");
+        resume.addContact(LINKEDIN, "https://www.linkedin.com/in/gkislin");
+        return resume;
+    }
+
     public static void main(String[] args) {
         // print to console
         Resume resume = setResumeTestData("testUuid", "Григорий Кислин");
