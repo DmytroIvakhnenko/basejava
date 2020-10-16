@@ -6,6 +6,7 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NonExistStorageException;
+import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
@@ -25,7 +26,7 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = UUID.randomUUID().toString();
     private static final String UUID_4 = UUID.randomUUID().toString();
 
-    private static final Resume RESUME_1 = setResumeTestDataWithNoSections(UUID_1, "Testman1");
+    private static final Resume RESUME_1 = new Resume(UUID_1, "Testman1");//setResumeTestDataWithNoSections(UUID_1, "Testman1");
     private static final Resume RESUME_2 = setResumeTestDataWithNoSections(UUID_2, "Testman2");
     private static final Resume RESUME_3 = setResumeTestDataWithNoSections(UUID_3, "Testman3");
     private static final Resume RESUME_4 = setResumeTestDataWithNoSections(UUID_4, "Testman4");
@@ -75,6 +76,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void updateTest() {
         Resume newResume = setResumeTestDataWithNoSections(UUID_1, "New Testman");
+        newResume.addContact(ContactType.STACKOVERFLOW, "some_so");
         storage.update(newResume);
         Assert.assertEquals(newResume, storage.get(UUID_1));
     }
