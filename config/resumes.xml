@@ -1,0 +1,5 @@
+<!--Put this file to tomcat/conf/Catalina/*YOUR_HOST*/ folder -->
+<Context>
+    <Parameter name="configurationPath" value="*PATH_TO_YOUR_FOLDER_WITH_CONFIGURATION_FILE*" type="java.lang.String"/>
+</Context>
+

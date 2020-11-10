@@ -14,24 +14,7 @@ import static ru.javawebinar.basejava.model.SectionType.*;
 public class ResumeTestData {
     public static Resume setResumeTestData(String uuid, String fullName) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yyyy");
-        Resume resume = new Resume(uuid, fullName);
-        /*----------------------------------------------------------------------------------------------------------*/
-        // contacts
-        resume.addContact(TELEPHONE, "+7(921) 855-0482");
-        resume.addContact(SKYPE, "grigory.kislin");
-        resume.addContact(EMAIL, "gkislin@yandex.ru");
-        resume.addContact(LINKEDIN, "https://www.linkedin.com/in/gkislin");
-        /*----------------------------------------------------------------------------------------------------------*/
-        resume.addSection(PERSONAL, new TextSection("Аналитический склад ума ..."));
-        /*----------------------------------------------------------------------------------------------------------*/
-        resume.addSection(OBJECTIVE, new TextSection("Ведущий стажировок и ..."));
-        /*----------------------------------------------------------------------------------------------------------*/
-        ListSection ach = new ListSection("С 2013 года: ...", "Реализация двухфакторной ...", "Налаживание процесса ...", "Реализация c нуля ...", "Создание JavaEE фреймворка ...", "Реализация протоколов ...");
-        resume.addSection(ACHIEVEMENT, ach);
-        /*----------------------------------------------------------------------------------------------------------*/
-        ListSection qua = new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J ...", "Version control: Subversion, Git ...", "DB: PostgreSQL(наследование ...", "Languages: Java, Scala ...");
-        resume.addSection(QUALIFICATIONS, qua);
-        /*----------------------------------------------------------------------------------------------------------*/
+        Resume resume = setResumeTestDataNoExperienceSections(uuid, fullName);
         List<Experience> expl = new ArrayList<>();
         expl.add(new Experience("Java Online Projects.", "https://javaops.ru/", new Experience.Position(YearMonth.parse("10/2013", format), YearMonth.now(), "Автор проекта.", "Создание, организация ...")));
         expl.add(new Experience("Wrike.", "https://www.wrike.com/", new Experience.Position(YearMonth.parse("10/2014", format), YearMonth.parse("10/2016", format), "Старший разработчик (backend).", "Проектирование и разработка ...")));
@@ -50,16 +33,30 @@ public class ResumeTestData {
         return resume;
     }
 
-    public static Resume setResumeTestDataWithNoSectionsAndContacts(String uuid, String fullName) {
+    public static Resume setResumeTestDataNoContactsNoSections(String uuid, String fullName) {
         return new Resume(uuid, fullName);
     }
 
-    public static Resume setResumeTestDataWithNoSections(String uuid, String fullName) {
-        Resume resume = new Resume(uuid, fullName);
+    public static Resume setResumeTestDataNoSections(String uuid, String fullName) {
+        Resume resume = setResumeTestDataNoContactsNoSections(uuid, fullName);
         resume.addContact(TELEPHONE, "+7(921) 855-0482");
         resume.addContact(SKYPE, "grigory.kislin");
         resume.addContact(EMAIL, "gkislin@yandex.ru");
         resume.addContact(LINKEDIN, "https://www.linkedin.com/in/gkislin");
+        return resume;
+    }
+
+    public static Resume setResumeTestDataNoExperienceSections(String uuid, String fullName) {
+        Resume resume = setResumeTestDataNoSections(uuid, fullName);
+        resume.addSection(PERSONAL, new TextSection("Аналитический склад ума ..."));
+        /*----------------------------------------------------------------------------------------------------------*/
+        resume.addSection(OBJECTIVE, new TextSection("Ведущий стажировок и ..."));
+        /*----------------------------------------------------------------------------------------------------------*/
+        ListSection ach = new ListSection("С 2013 года: ...", "Реализация двухфакторной ...", "Налаживание процесса ...", "Реализация c нуля ...", "Создание JavaEE фреймворка ...", "Реализация протоколов ...");
+        resume.addSection(ACHIEVEMENT, ach);
+        /*----------------------------------------------------------------------------------------------------------*/
+        ListSection qua = new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J ...", "Version control: Subversion, Git ...", "DB: PostgreSQL(наследование ...", "Languages: Java, Scala ...");
+        resume.addSection(QUALIFICATIONS, qua);
         return resume;
     }
 

@@ -6,15 +6,15 @@ import org.junit.Test;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NonExistStorageException;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static ru.javawebinar.basejava.ResumeTestData.setResumeTestDataWithNoSections;
+import static ru.javawebinar.basejava.ResumeTestData.setResumeTestDataNoExperienceSections;
+import static ru.javawebinar.basejava.ResumeTestData.setResumeTestDataNoSections;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
@@ -27,9 +27,9 @@ public abstract class AbstractStorageTest {
     private static final String UUID_4 = UUID.randomUUID().toString();
 
     private static final Resume RESUME_1 = new Resume(UUID_1, "Testman1");//setResumeTestDataWithNoSections(UUID_1, "Testman1");
-    private static final Resume RESUME_2 = setResumeTestDataWithNoSections(UUID_2, "Testman2");
-    private static final Resume RESUME_3 = setResumeTestDataWithNoSections(UUID_3, "Testman3");
-    private static final Resume RESUME_4 = setResumeTestDataWithNoSections(UUID_4, "Testman4");
+    private static final Resume RESUME_2 = setResumeTestDataNoExperienceSections(UUID_2, "Testman2");
+    private static final Resume RESUME_3 = setResumeTestDataNoExperienceSections(UUID_3, "Testman3");
+    private static final Resume RESUME_4 = setResumeTestDataNoExperienceSections(UUID_4, "Testman4");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -75,8 +75,10 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void updateTest() {
-        Resume newResume = setResumeTestDataWithNoSections(UUID_1, "New Testman");
+        Resume newResume = setResumeTestDataNoSections(UUID_1, "New Testman");
         newResume.addContact(ContactType.STACKOVERFLOW, "some_so");
+        newResume.addSection(SectionType.OBJECTIVE, new TextSection("dummy"));
+        newResume.addSection(SectionType.ACHIEVEMENT, new ListSection("dummy1", "dummy2", "dummy3"));
         storage.update(newResume);
         Assert.assertEquals(newResume, storage.get(UUID_1));
     }
