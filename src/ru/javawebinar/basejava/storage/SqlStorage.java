@@ -1,12 +1,12 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NonExistStorageException;
-import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,18 +66,22 @@ public class SqlStorage implements Storage {
     public Resume get(String uuid) {
         return sqlHelper.transactionalExecute(conn -> {
             Resume r;
-            try (Statement s = conn.createStatement()) {
-                ResultSet rs = s.executeQuery(String.format("SELECT * FROM resume r WHERE r.uuid='%s'", uuid));
+            try (PreparedStatement psResumes = conn.prepareStatement("SELECT * FROM resume r WHERE r.uuid= ?");
+                 PreparedStatement psContacts = conn.prepareStatement("SELECT * FROM contact c WHERE c.resume_uuid= ?");
+                 PreparedStatement psSections = conn.prepareStatement("SELECT * FROM section s WHERE s.resume_uuid= ?")) {
+                psResumes.setString(1, uuid);
+                psContacts.setString(1, uuid);
+                psSections.setString(1, uuid);
+                ResultSet rs = psResumes.executeQuery();
                 if (!rs.next()) {
                     throw new NonExistStorageException(uuid);
                 }
                 r = new Resume(rs.getString("uuid"), rs.getString("full_name"));
-
-                rs = s.executeQuery(String.format("SELECT * FROM contact c WHERE c.resume_uuid='%s'", uuid));
+                rs = psContacts.executeQuery();
                 while (rs.next()) {
                     setContact(r, rs);
                 }
-                rs = s.executeQuery(String.format("SELECT * FROM section s WHERE s.resume_uuid='%s'", uuid));
+                rs = psSections.executeQuery();
                 while (rs.next()) {
                     setSection(r, rs);
                 }
@@ -100,32 +104,28 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.transactionalExecute(conn -> {
-            List<Resume> resumes = new ArrayList<>();
-            try (Statement s = conn.createStatement()) {
-                ResultSet rs = s.executeQuery("SELECT * FROM resume ORDER BY full_name, uuid");
+            Map<String, Resume> resumes = new LinkedHashMap<>();
+            try (PreparedStatement psResumes = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid");
+                 PreparedStatement psContacts = conn.prepareStatement("SELECT * FROM contact");
+                 PreparedStatement psSections = conn.prepareStatement("SELECT * FROM section")) {
+                ResultSet rs = psResumes.executeQuery();
                 while (rs.next()) {
-                    resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
+                    resumes.put(rs.getString("uuid"), new Resume(rs.getString("uuid"), rs.getString("full_name")));
                 }
-                rs = s.executeQuery("SELECT * FROM contact");
+                rs = psContacts.executeQuery();
                 while (rs.next()) {
                     String uuid = rs.getString("resume_uuid");
-                    Resume r = resumes.stream()
-                            .filter(x -> x.getUuid().equals(uuid))
-                            .findFirst()
-                            .orElseThrow(() -> new StorageException(String.format("Unknown uuid: %s found in Contact table", uuid)));
+                    Resume r = resumes.get(uuid);
                     setContact(r, rs);
                 }
-                rs = s.executeQuery("SELECT * FROM section ");
+                rs = psSections.executeQuery();
                 while (rs.next()) {
                     String uuid = rs.getString("resume_uuid");
-                    Resume r = resumes.stream()
-                            .filter(x -> x.getUuid().equals(uuid))
-                            .findFirst()
-                            .orElseThrow(() -> new StorageException(String.format("Unknown uuid: %s found in Section table", uuid)));
+                    Resume r = resumes.get(uuid);
                     setSection(r, rs);
                 }
             }
-            return resumes;
+            return new ArrayList<>(resumes.values());
         });
     }
 
