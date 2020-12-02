@@ -5,6 +5,14 @@ header {
     padding: 5px 20px;
 }
 
+body {
+    font-family: Arial, Verdana, Tahoma;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.429;
+    color: rgba(0, 0, 0, .87);
+}
+
 footer {
     background: none repeat scroll 0 0 #A6C9E2;
     color: #2E6E9E;
@@ -13,6 +21,45 @@ footer {
     margin: 20px 0;
 }
 
-table, th, td {
-    border: 1px solid lightgray;
+table {
+    border: 1px solid #ddd;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+th, td {
+    padding: 5px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border: 1px solid #ddd;
+}
+
+th {
+    background: #eee;
+}
+
+.td-icons {
+    width: 5%;
+    text-align: center;
+}
+
+dl {
+    background: none repeat scroll 0 0 #FAFAFA;
+    margin: 8px 0;
+    padding: 0;
+}
+
+dt {
+    display: inline-block;
+    width: 170px;
+}
+
+dd {
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: top;
 }

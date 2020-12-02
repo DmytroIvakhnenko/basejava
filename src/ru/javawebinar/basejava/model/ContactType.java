@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.model;
 
+import static ru.javawebinar.basejava.model.util.contactTypeHtmlView.getHtmlView;
+
 public enum ContactType {
     TELEPHONE("Тел."),
     SKYPE("Skype"),
@@ -17,5 +19,9 @@ public enum ContactType {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getHtml(String value) {
+        return getHtmlView(value, this);
     }
 }
