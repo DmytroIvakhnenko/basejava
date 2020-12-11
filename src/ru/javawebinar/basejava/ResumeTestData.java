@@ -12,13 +12,13 @@ import static ru.javawebinar.basejava.model.ContactType.*;
 import static ru.javawebinar.basejava.model.SectionType.*;
 
 public class ResumeTestData {
-    public static Resume setResumeTestData(String uuid, String fullName) {
+    public static Resume setFullResumeTestData(String uuid, String fullName) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/yyyy");
         Resume resume = setResumeTestDataNoExperienceSections(uuid, fullName);
         List<Experience> expl = new ArrayList<>();
-        expl.add(new Experience("Java Online Projects.", "https://javaops.ru/", new Experience.Position(YearMonth.parse("10/2013", format), YearMonth.now(), "Автор проекта.", "Создание, организация ...")));
-        expl.add(new Experience("Wrike.", "https://www.wrike.com/", new Experience.Position(YearMonth.parse("10/2014", format), YearMonth.parse("10/2016", format), "Старший разработчик (backend).", "Проектирование и разработка ...")));
-        expl.add(new Experience("RIT Center.", null, new Experience.Position(YearMonth.parse("04/2012", format), YearMonth.parse("10/2014", format), "Java архитектор.", "Организация процесса разработки ...")));
+        expl.add(new Experience("Java Online Projects", "https://javaops.ru/", new Experience.Position(YearMonth.parse("10/2013", format), YearMonth.now(), "Автор проекта.", "Создание, организация ...")));
+        expl.add(new Experience("Wrike", "https://www.wrike.com/", new Experience.Position(YearMonth.parse("10/2014", format), YearMonth.parse("10/2016", format), "Старший разработчик (backend).", "Проектирование и разработка ...")));
+        expl.add(new Experience("RIT Center", null, new Experience.Position(YearMonth.parse("04/2012", format), YearMonth.parse("10/2014", format), "Java архитектор.", "Организация процесса разработки ...")));
         ExperienceSection exp = new ExperienceSection(expl);
         resume.addSection(EXPERIENCE, exp);
         /*----------------------------------------------------------------------------------------------------------*/
@@ -62,7 +62,7 @@ public class ResumeTestData {
 
     public static void main(String[] args) {
         // print to console
-        Resume resume = setResumeTestData("testUuid", "Григорий Кислин");
+        Resume resume = setFullResumeTestData("testUuid", "Григорий Кислин");
         System.out.println(resume.getFullName());
         Map<ContactType, String> contactsMap = resume.getContacts();
         for (ContactType key : contactsMap.keySet()) {

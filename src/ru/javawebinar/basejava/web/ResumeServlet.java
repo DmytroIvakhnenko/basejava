@@ -10,7 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -51,6 +55,33 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 case EDUCATION:
                 case EXPERIENCE:
+                    if (Objects.nonNull(request.getParameterValues(type + ".place"))) {
+                        int expIndex = 0;
+                        int expCount = request.getParameterValues(type + ".place").length;
+                        List<Experience> expList = new ArrayList<>(expCount);
+                        for (int i = 0; i < expCount; i++) {
+                            String[] places = request.getParameterValues(type + ".place");
+                            String[] homepages = request.getParameterValues(type + ".homepage");
+                            //find next available index
+                            while (Objects.isNull(request.getParameterValues(type + String.valueOf(expIndex) + ".position"))){
+                                expIndex++;
+                            }
+                            String[] positions = request.getParameterValues(type + String.valueOf(expIndex) + ".position");
+                            String[] descriptions = request.getParameterValues(type + String.valueOf(expIndex) + ".description");
+                            String[] startDates = request.getParameterValues(type + String.valueOf(expIndex) + ".startDate");
+                            String[] endDates = request.getParameterValues(type + String.valueOf(expIndex) + ".endDate");
+                            expIndex++;
+                            List<Experience.Position> posList = new ArrayList<>();
+                            DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM");
+                            for (int j = 0; j < positions.length; j++) {
+                                posList.add(new Experience.Position(YearMonth.parse(startDates[j], format), YearMonth.parse(endDates[j], format), positions[j], descriptions[j]));
+                            }
+                            expList.add(new Experience(places[i], homepages[i], posList.toArray(new Experience.Position[0])));
+                        }
+                        resume.addSection(type, new ExperienceSection(expList));
+                    } else {
+                        resume.getSections().remove(type);
+                    }
                     break;
                 case PERSONAL:
                 case OBJECTIVE:
@@ -106,7 +137,7 @@ public class ResumeServlet extends HttpServlet {
         return (value != null && value.trim().length() != 0);
     }
 
-    private static boolean isSaveAction(HttpServletRequest request) {
+    private static boolean isSaveAction(final HttpServletRequest request) {
         return request.getParameter("action").equals("add");
     }
 }

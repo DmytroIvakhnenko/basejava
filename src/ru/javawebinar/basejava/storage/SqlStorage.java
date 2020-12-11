@@ -1,8 +1,12 @@
 package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NonExistStorageException;
-import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.model.AbstractSection;
+import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.SectionType;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.storage.util.JsonParser;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -166,18 +170,8 @@ public class SqlStorage implements Storage {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (content, resume_uuid, type) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
                 SectionType st = e.getKey();
-                switch (st) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        TextSection ts = (TextSection) e.getValue();
-                        ps.setString(1, ts.getText());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        ListSection ls = (ListSection) e.getValue();
-                        ps.setString(1, String.join("\n", ls.getItems()));
-                        break;
-                }
+                AbstractSection section = e.getValue();
+                ps.setString(1, JsonParser.write(section, AbstractSection.class));
                 ps.setString(2, r.getUuid());
                 ps.setString(3, e.getKey().name());
                 ps.addBatch();
@@ -195,16 +189,7 @@ public class SqlStorage implements Storage {
     private void setSection(final Resume r, final ResultSet rs) throws SQLException {
         if (rs.getString("resume_uuid") != null) {
             SectionType st = SectionType.valueOf(rs.getString("type"));
-            switch (st) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    r.addSection(st, new TextSection(rs.getString("content")));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    r.addSection(st, new ListSection(rs.getString("content").split("\\n")));
-                    break;
-            }
+            r.addSection(st, JsonParser.read(rs.getString("content"), AbstractSection.class));
         }
     }
 }
