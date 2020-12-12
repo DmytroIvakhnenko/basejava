@@ -18,7 +18,7 @@
                 <input type="hidden" name="uuid" value="${resume.uuid}">
                 <dl>
                     <dt>Full Name:</dt>
-                    <dd><input type="text" name="fullName" size=40 value="${resume.fullName}"></dd>
+                    <dd><input type="text" name="fullName" size=40 value="${resume.fullName}" required></dd>
                 </dl>
                 <!-- Contacts -->
                 <h3>Контакты:</h3>

@@ -20,7 +20,7 @@ public class ResumeTestData {
         expl.add(new Experience("Wrike", "https://www.wrike.com/", new Experience.Position(YearMonth.parse("10/2014", format), YearMonth.parse("10/2016", format), "Старший разработчик (backend).", "Проектирование и разработка ...")));
         expl.add(new Experience("RIT Center", null, new Experience.Position(YearMonth.parse("04/2012", format), YearMonth.parse("10/2014", format), "Java архитектор.", "Организация процесса разработки ...")));
         ExperienceSection exp = new ExperienceSection(expl);
-        resume.addSection(EXPERIENCE, exp);
+        resume.setSection(EXPERIENCE, exp);
         /*----------------------------------------------------------------------------------------------------------*/
         List<Experience> edul = new ArrayList<>();
         edul.add(new Experience("Coursera", "https://www.coursera.org/learn/progfun1", new Experience.Position(YearMonth.parse("03/2013", format), YearMonth.parse("05/2013", format), "Functional Programming ...", null)));
@@ -29,7 +29,7 @@ public class ResumeTestData {
         edul.add(new Experience("Санкт-Петербургский национальный ...", "https://itmo.ru/ru/", new Experience.Position(YearMonth.parse("09/1993", format), YearMonth.parse("07/1996", format), "Аспирантура (программист С ...", null),
                 new Experience.Position(YearMonth.parse("09/1987", format), YearMonth.parse("07/1993", format), "Инженер (программист Fortran ...", null)));
         ExperienceSection edu = new ExperienceSection(edul);
-        resume.addSection(EDUCATION, edu);
+        resume.setSection(EDUCATION, edu);
         return resume;
     }
 
@@ -39,24 +39,24 @@ public class ResumeTestData {
 
     public static Resume setResumeTestDataNoSections(String uuid, String fullName) {
         Resume resume = setResumeTestDataNoContactsNoSections(uuid, fullName);
-        resume.addContact(TELEPHONE, "+7(921) 855-0482");
-        resume.addContact(SKYPE, "grigory.kislin");
-        resume.addContact(EMAIL, "gkislin@yandex.ru");
-        resume.addContact(LINKEDIN, "https://www.linkedin.com/in/gkislin");
+        resume.setContact(TELEPHONE, "+7(921) 855-0482");
+        resume.setContact(SKYPE, "grigory.kislin");
+        resume.setContact(EMAIL, "gkislin@yandex.ru");
+        resume.setContact(LINKEDIN, "https://www.linkedin.com/in/gkislin");
         return resume;
     }
 
     public static Resume setResumeTestDataNoExperienceSections(String uuid, String fullName) {
         Resume resume = setResumeTestDataNoSections(uuid, fullName);
-        resume.addSection(PERSONAL, new TextSection("Аналитический склад ума ..."));
+        resume.setSection(PERSONAL, new TextSection("Аналитический склад ума ..."));
         /*----------------------------------------------------------------------------------------------------------*/
-        resume.addSection(OBJECTIVE, new TextSection("Ведущий стажировок и ..."));
+        resume.setSection(OBJECTIVE, new TextSection("Ведущий стажировок и ..."));
         /*----------------------------------------------------------------------------------------------------------*/
         ListSection ach = new ListSection("С 2013 года: ...", "Реализация двухфакторной ...", "Налаживание процесса ...", "Реализация c нуля ...", "Создание JavaEE фреймворка ...", "Реализация протоколов ...");
-        resume.addSection(ACHIEVEMENT, ach);
+        resume.setSection(ACHIEVEMENT, ach);
         /*----------------------------------------------------------------------------------------------------------*/
         ListSection qua = new ListSection("JEE AS: GlassFish (v2.1, v3), OC4J ...", "Version control: Subversion, Git ...", "DB: PostgreSQL(наследование ...", "Languages: Java, Scala ...");
-        resume.addSection(QUALIFICATIONS, qua);
+        resume.setSection(QUALIFICATIONS, qua);
         return resume;
     }
 

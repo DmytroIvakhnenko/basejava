@@ -37,7 +37,7 @@ public class ResumeServlet extends HttpServlet {
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (notEmpty(value)) {
-                resume.addContact(type, value);
+                resume.setContact(type, value);
             } else {
                 resume.getContacts().remove(type);
             }
@@ -48,7 +48,7 @@ public class ResumeServlet extends HttpServlet {
                 case QUALIFICATIONS:
                     String[] values = request.getParameterValues(String.valueOf(type));
                     if (Objects.nonNull(values) && Arrays.stream(values).anyMatch(ResumeServlet::notEmpty)) {
-                        resume.addSection(type, new ListSection(Arrays.stream(values).filter(ResumeServlet::notEmpty).collect(Collectors.toList())));
+                        resume.setSection(type, new ListSection(Arrays.stream(values).filter(ResumeServlet::notEmpty).collect(Collectors.toList())));
                     } else {
                         resume.getSections().remove(type);
                     }
@@ -78,7 +78,7 @@ public class ResumeServlet extends HttpServlet {
                             }
                             expList.add(new Experience(places[i], homepages[i], posList.toArray(new Experience.Position[0])));
                         }
-                        resume.addSection(type, new ExperienceSection(expList));
+                        resume.setSection(type, new ExperienceSection(expList));
                     } else {
                         resume.getSections().remove(type);
                     }
@@ -87,7 +87,7 @@ public class ResumeServlet extends HttpServlet {
                 case OBJECTIVE:
                     String value = request.getParameter(type.name());
                     if (notEmpty(value)) {
-                        resume.addSection(type, new TextSection(value));
+                        resume.setSection(type, new TextSection(value));
                     } else {
                         resume.getSections().remove(type);
                     }

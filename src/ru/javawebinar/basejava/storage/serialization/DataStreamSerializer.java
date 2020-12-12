@@ -95,21 +95,21 @@ public class DataStreamSerializer implements SerializationStrategy {
         switch (st) {
             case PERSONAL:
             case OBJECTIVE:
-                resume.addSection(st, new TextSection(readString(dis)));
+                resume.setSection(st, new TextSection(readString(dis)));
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                resume.addSection(st, new ListSection(readList(dis, this::readString)));
+                resume.setSection(st, new ListSection(readList(dis, this::readString)));
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                resume.addSection(st, new ExperienceSection(readList(dis, this::readExperience)));
+                resume.setSection(st, new ExperienceSection(readList(dis, this::readExperience)));
                 break;
         }
     }
 
     private void readContacts(DataInputStream dis, Resume resume) throws IOException {
-        resume.addContact(ContactType.valueOf(readString(dis)), readString(dis));
+        resume.setContact(ContactType.valueOf(readString(dis)), readString(dis));
     }
 
     private void readResumeBlock(DataInputStream dis, Resume resume, BiConsumerWithException<DataInputStream, Resume> consumer) throws IOException {
