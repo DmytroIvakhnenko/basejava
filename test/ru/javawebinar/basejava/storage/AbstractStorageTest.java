@@ -78,10 +78,13 @@ public abstract class AbstractStorageTest {
     @Test
     public void updateTest() {
         Resume newResume = setResumeTestDataNoSections(UUID_1, "New Testman");
-        newResume.addContact(ContactType.STACKOVERFLOW, "some_so");
-        newResume.addSection(SectionType.OBJECTIVE, new TextSection("dummy"));
-        newResume.addSection(SectionType.ACHIEVEMENT, new ListSection("dummy1", "dummy2", "dummy3"));
-        newResume.addSection(SectionType.EXPERIENCE, new ExperienceSection(new Experience("testPlace", "https://www.testsite.org", new Experience.Position(YearMonth.parse("01/2001", DateTimeFormatter.ofPattern("MM/yyyy")), YearMonth.parse("02/2002", DateTimeFormatter.ofPattern("MM/yyyy")), "testPosition", "testDesc"))));
+        newResume.setContact(ContactType.STACKOVERFLOW, "some_so");
+        newResume.setSection(SectionType.OBJECTIVE, new TextSection("dummy"));
+        newResume.setSection(SectionType.ACHIEVEMENT, new ListSection("dummy1", "dummy2", "dummy3"));
+        YearMonth date1 = YearMonth.parse("01/2001", DateTimeFormatter.ofPattern("MM/yyyy"));
+        YearMonth date2 = YearMonth.parse("02/2002", DateTimeFormatter.ofPattern("MM/yyyy"));
+        Experience.Position pos = new Experience.Position(date1, date2, "testPosition", "testDesc");
+        newResume.setSection(SectionType.EXPERIENCE, new ExperienceSection(new Experience("testPlace", "https://www.testsite.org", pos)));
         storage.update(newResume);
         Assert.assertEquals(newResume, storage.get(UUID_1));
     }
