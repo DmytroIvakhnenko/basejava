@@ -23,7 +23,7 @@ public class ResumeServlet extends HttpServlet {
 
     @Override
     public void init(final ServletConfig config) {
-        Config.setConfigurationPath(config.getServletContext().getInitParameter("configurationPath"));
+        //Config.setConfigurationPath(config.getServletContext().getInitParameter("configurationPath"));
         sqlStorage = Config.getInstance().getSqlStorage();
     }
 
